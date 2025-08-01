@@ -1,0 +1,82 @@
+// File: prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  icon      String   @default("fas fa-tag")
+  color     String   @default("#6B7280")
+  type      String   @default("expense") // "income" or "expense"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transactions          Transaction[]
+  budgets               Budget[]
+  recurringTransactions RecurringTransaction[]
+}
+
+model Transaction {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+  amount      Float
+  type        String
+  categoryId  String
+  date        DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category    Category @relation(fields: [categoryId], references: [id])
+}
+
+model Budget {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  categoryId String
+  amount     Float
+  period     String   @default("monthly") // "weekly", "monthly", "yearly"
+  startDate  DateTime
+  endDate    DateTime?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  category   Category @relation(fields: [categoryId], references: [id])
+}
+
+model Goal {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String?
+  targetAmount  Float
+  currentAmount Float   @default(0)
+  targetDate    DateTime?
+  category      String  @default("savings") // "savings", "debt", "purchase"
+  priority      String  @default("medium") // "low", "medium", "high"
+  isCompleted   Boolean @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model RecurringTransaction {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  description   String
+  amount        Float
+  type          String
+  categoryId    String
+  frequency     String   // "daily", "weekly", "monthly", "yearly"
+  startDate     DateTime
+  endDate       DateTime?
+  lastProcessed DateTime?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  category      Category @relation(fields: [categoryId], references: [id])
+}

@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Finance Tracker - Penny Trail
 
-## Getting Started
+## Overview
 
-First, run the development server:
+Penny Trail is a full-stack personal finance tracking application built with a modern tech stack. The application allows users to track their income and expenses, categorize transactions, view analytics with charts, and generate reports. It features a responsive design with both desktop and mobile interfaces, providing comprehensive financial management capabilities through an intuitive dashboard.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## User Preferences
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Preferred communication style: Simple, everyday language.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## System Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Frontend Architecture
 
-## Learn More
+The client-side is built using React with TypeScript, implementing a single-page application (SPA) architecture. The application uses Wouter for lightweight client-side routing and TanStack Query for server state management and caching. The UI is built with shadcn/ui components based on Radix UI primitives, styled with Tailwind CSS for consistent design and responsive layouts.
 
-To learn more about Next.js, take a look at the following resources:
+Key architectural decisions:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Component-based architecture**: Modular React components with clear separation of concerns
+- **State management**: TanStack Query handles server state, while local component state manages UI interactions
+- **Routing**: Wouter provides minimal client-side routing without the overhead of React Router
+- **Styling approach**: Tailwind CSS with CSS custom properties for theming and design consistency
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Backend Architecture
 
-## Deploy on Vercel
+The server-side follows a RESTful API design using Express.js with TypeScript. The application implements a layered architecture with clear separation between routes, business logic, and data access. Currently uses in-memory storage with interfaces designed for easy migration to persistent storage.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Key architectural decisions:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **MVC pattern**: Routes handle HTTP concerns, storage layer manages data operations
+- **Type safety**: Shared TypeScript schemas between client and server using Zod validation
+- **Middleware approach**: Express middleware for request logging, error handling, and JSON parsing
+- **Development setup**: Vite integration for hot module replacement in development
+
+### Data Storage Solutions
+
+The application uses a flexible storage architecture with an interface-based approach. Currently implements in-memory storage with predefined categories and transaction data. The database schema is defined using Drizzle ORM with PostgreSQL as the target database for production deployment.
+
+Key architectural decisions:
+
+- **Interface abstraction**: IStorage interface allows switching between storage implementations
+- **Schema validation**: Drizzle-Zod integration provides runtime validation and type safety
+- **Migration ready**: Drizzle configuration prepared for PostgreSQL deployment
+- **Default data**: Pre-populated categories for immediate application usability
+
+### Authentication and Authorization
+
+Currently, the application does not implement authentication mechanisms, operating as a single-user application. The architecture is prepared for future authentication integration through the existing middleware structure.
+
+### Component Design System
+
+The UI implements a comprehensive design system using shadcn/ui components, providing consistent styling and behavior across the application. The system includes form components, data visualization elements, navigation components, and feedback mechanisms.
+
+Key architectural decisions:
+
+- **Design tokens**: CSS custom properties for consistent theming
+- **Component variants**: Class Variance Authority for systematic component variations
+- **Icon system**: FontAwesome integration for consistent iconography
+- **Responsive design**: Mobile-first approach with desktop enhancements
+
+## External Dependencies
+
+### Frontend Dependencies
+
+- **React ecosystem**: React 18 with TypeScript for component development
+- **State management**: TanStack React Query for server state and caching
+- **Routing**: Wouter for lightweight client-side navigation
+- **Form handling**: React Hook Form with Hookform Resolvers for form validation
+- **UI components**: Radix UI primitives providing accessible component foundations
+- **Styling**: Tailwind CSS for utility-first styling approach
+- **Charts**: Recharts for data visualization and analytics displays
+- **Date handling**: date-fns for date manipulation and formatting
+
+### Backend Dependencies
+
+- **Runtime**: Node.js with Express.js web framework
+- **Database**: Drizzle ORM with PostgreSQL driver (@neondatabase/serverless)
+- **Validation**: Zod for schema validation and type safety
+- **Development**: tsx for TypeScript execution, esbuild for production builds
+- **Session management**: connect-pg-simple for PostgreSQL session storage (prepared for future use)
+
+### Development Tools
+
+- **Build system**: Vite for frontend bundling and development server
+- **TypeScript**: Comprehensive type checking across the entire application
+- **Database migrations**: Drizzle Kit for schema management and migrations
+- **Development environment**: Replit-specific plugins for enhanced development experience
+
+### Third-party Services
+
+- **Database hosting**: Configured for Neon PostgreSQL hosting
+- **Asset delivery**: FontAwesome CDN for icon resources
+- **Development platform**: Replit integration for development and deployment environment

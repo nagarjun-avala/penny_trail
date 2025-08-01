@@ -1,26 +1,128 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(210, 40%, 98%);
+  --muted-foreground: hsl(215.4, 16.3%, 46.9%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(214.3, 31.8%, 91.4%);
+  --input: hsl(214.3, 31.8%, 91.4%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222.2, 84%, 4.9%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(222.2, 84%, 4.9%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(207, 90%, 54%);
+  --radius: 0.75rem;
+  --brand-50: hsl(204, 100%, 97%);
+  --brand-100: hsl(204, 93.8%, 93.7%);
+  --brand-500: hsl(207, 90%, 54%);
+  --brand-600: hsl(208, 79.2%, 51%);
+  --brand-700: hsl(221, 83.2%, 53.3%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(207, 90%, 54%);
+  --brand-50: hsl(204, 100%, 97%);
+  --brand-100: hsl(204, 93.8%, 93.7%);
+  --brand-500: hsl(207, 90%, 54%);
+  --brand-600: hsl(208, 79.2%, 51%);
+  --brand-700: hsl(221, 83.2%, 53.3%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-slate-50 text-foreground;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .brand-gradient {
+    @apply bg-gradient-to-br from-[hsl(207,90%,54%)] to-[hsl(221,83.2%,53.3%)];
+  }
+
+  .financial-card {
+    @apply bg-white rounded-xl shadow-sm border border-slate-200 p-6;
+  }
+
+  .nav-link {
+    @apply flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors;
+  }
+
+  .nav-link.active {
+    @apply bg-[hsl(204,100%,97%)] text-[hsl(207,90%,54%)] font-medium;
+  }
 }
