@@ -98,3 +98,11 @@ export type GoalWithProgress = Goal & {
     daysRemaining?: number;
     monthlyTarget?: string;
 };
+
+export type trasanctionSummayType = {
+    income: number
+    expenses: number
+    netIncome: number
+    savingsRate: number
+    expenseRate: number
+}

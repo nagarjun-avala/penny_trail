@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Overview } from "@/components/overview"
 import { RecentTransactions } from "@/components/recent-transactions"
@@ -9,61 +9,117 @@ import { dummyTransactions } from "@/data/dummyTransactions"
 import { calculateTrendChanges, generateTrends } from "@/lib/generateTrends"
 import { defaultCategories } from "@/lib/contsants"
 import { ArrowDown, ArrowUp, Wallet } from "lucide-react"
-import { TrendData } from "@/lib/types"
+import { Transaction, TrendData } from "@/lib/types"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useIsMobile } from "@/hooks/use-mobile"
 
-const dummySummary = {
-  income: 1200,
-  expenses: 650,
-}
-
-type summayType = {
-  income: number
-  expenses: number
-  netIncome: number
-  savingsRate: number
-  expenseRate: number
-}
 
 export default function DashboardPage() {
-  const [days, setDays] = useState(7)
-  const [summary, setSummary] = useState<summayType>()
+  const [timeRange, setTimeRange] = useState('30')
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [summary, setSummary] = useState({
+    income: 0,
+    expenses: 0,
+    netIncome: 0,
+    savingsRate: 0,
+    expenseRate: 0,
+  })
   const [trends, setTrends] = useState<TrendData[]>([])
-  const [transactions, setTransactions] = useState(dummyTransactions.slice(-days))
   const [changes, setChanges] = useState({
     incomeChange: 0,
     expenseChange: 0,
     netChange: 0,
   })
+  const isMobile = useIsMobile()
+  useEffect(() => {
+    if (isMobile) {
+      setTimeRange('7')
+    }
+  }, [isMobile])
+
+  // Reusable filter function using useCallback
+  const getFilteredTransactions = useCallback(
+    (data: Transaction[]) => {
+      const referenceDate = new Date()
+      const startDate = new Date(referenceDate)
+      startDate.setDate(referenceDate.getDate() - Number(timeRange))
+
+      return data.filter((item) => {
+        const date = new Date(item.date)
+        return date >= startDate && date <= referenceDate
+      })
+    },
+    [timeRange]
+  )
 
   useEffect(() => {
-    const trendData = generateTrends(dummyTransactions, defaultCategories)
-    setTrends(trendData)
+    const filtered = getFilteredTransactions(dummyTransactions)
+    setTransactions(filtered)
 
+    // ✅ Dynamically compute summary from filtered transactions
+    const income = filtered
+      .filter((t) => t.type === "income")
+      .reduce((sum, t) => sum + t.amount, 0)
+
+    const expenses = filtered
+      .filter((t) => t.type === "expense")
+      .reduce((sum, t) => sum + t.amount, 0)
+
+    const netIncome = income - expenses
+    const savingsRate = income > 0 ? Math.round((netIncome / income) * 100) : 0
+    const expenseRate = expenses > 0 ? Math.round((netIncome / expenses) * 100) : 0
+
+    setSummary({
+      income,
+      expenses,
+      netIncome,
+      savingsRate,
+      expenseRate,
+    })
+  }, [getFilteredTransactions])
+
+  useEffect(() => {
+    const trendData = generateTrends(transactions, defaultCategories)
+    setTrends(trendData)
     const calculatedChanges = calculateTrendChanges(trendData)
     setChanges(calculatedChanges)
-  }, [])
+  }, [transactions])
 
-  useEffect(() => {
-    const { income, expenses } = dummySummary
-    const netIncome = income - expenses;
-    const savingsRate = income > 0 ? Math.round((netIncome / income) * 100) : 0
-    const expenseRate = income > 0 ? Math.round((netIncome / expenses) * 100) : 0
-    setSummary({
-      income, expenses, netIncome, savingsRate, expenseRate
-    })
-  }, [])
 
-  // console.log("LOG :", {
-  //   dummyTransactions,
-  //   trends
-  // })
+
+  console.log("LOG :", {
+    trends,
+    transactions
+  })
 
   return (
     <div className="flex-1 space-y-4 md:p-8">
       {/* Page Header */}
-      <div>
-        <h2 className="text-3xl font-bold text-slate-900 mb-2">Dashboard</h2>
-        <p className="text-slate-600">Overview of your financial activity</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold text-slate-900 mb-2">Dashboard</h2>
+          <p className="text-slate-600">Overview of your financial activity</p>
+        </div>
+        <Select value={timeRange} onValueChange={setTimeRange}>
+          <SelectTrigger
+            className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
+            size="sm"
+            aria-label="Select a value"
+          >
+            <SelectValue placeholder="Last 3 months" />
+          </SelectTrigger>
+          <SelectContent className="rounded-xl">
+            <SelectItem value="90" className="rounded-lg">
+              Last 3 months
+            </SelectItem>
+            <SelectItem value="30" className="rounded-lg">
+              Last 30 days
+            </SelectItem>
+            <SelectItem value="7" className="rounded-lg">
+              Last 7 days
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Financial Summary Cards */}
@@ -127,7 +183,7 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <Overview data={trends} />
+      <Overview data={trends} days={timeRange} />
 
       {transactions.length === 0 ? (
         <EmptyPlaceholder />
