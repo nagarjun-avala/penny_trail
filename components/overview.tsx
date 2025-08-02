@@ -28,7 +28,7 @@ import {
   ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 import { useEffect, useState } from "react"
-import { TrendData } from "@/lib/generateTrends"
+import { TrendData } from "@/lib/types"
 
 const chartConfig = {
   spending: {
@@ -187,14 +187,14 @@ export function Overview({ data }: { data: TrendData[] }) {
               type="natural"
               fill="#ffe2e2"
               stroke="oklch(57.7% 0.245 27.325)"
-              stackId="a"
+              stackId="b"
             />
             <Area
               dataKey="net"
               type="natural"
               fill="#dbeafe"
               stroke="#155dfc"
-              stackId="a"
+              stackId="c"
             />
           </AreaChart>
         </ChartContainer>
