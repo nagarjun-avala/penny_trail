@@ -1,7 +1,7 @@
 "use client"
 import { cn } from "@/lib/utils";
 import CurrencySelector from "@/components/CurrencySelector";
-import { usePathname, useSearchParams, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import Link from "next/link";
 
 const navigation = [

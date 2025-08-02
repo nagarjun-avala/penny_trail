@@ -16,7 +16,7 @@ const categoryMap = new Map(defaultCategories.map(c => [c.name, c]))
 function getCategoryMeta(name: string) {
     const category = categoryMap.get(name)
     return {
-        type: category?.type === "income" ? "income" : "expense",
+        type: category?.type === "income" ? "income" : "expenses",
         icon: category?.icon ?? "💸",
         color: category?.color ?? "#ccc"
     }
@@ -57,7 +57,7 @@ export const RecentTransactions = React.memo(function RecentTransactions({
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className={type === "expense" ? "text-red-500" : "text-green-500"}>
+                                    <p className={type === "expenses" ? "text-red-500" : "text-green-500"}>
                                         {formatCurrency(tx.amount || 0)}
                                     </p>
                                 </div>

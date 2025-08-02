@@ -22,7 +22,7 @@ export default function DashboardPage() {
     expenses: 0,
     netIncome: 0,
     savingsRate: 0,
-    expenseRate: 0,
+    expensesRate: 0,
   })
   const [trends, setTrends] = useState<TrendData[]>([])
   const [changes, setChanges] = useState({
@@ -62,19 +62,19 @@ export default function DashboardPage() {
       .reduce((sum, t) => sum + t.amount, 0)
 
     const expenses = filtered
-      .filter((t) => t.type === "expense")
+      .filter((t) => t.type === "expenses")
       .reduce((sum, t) => sum + t.amount, 0)
 
     const netIncome = income - expenses
     const savingsRate = income > 0 ? Math.round((netIncome / income) * 100) : 0
-    const expenseRate = expenses > 0 ? Math.round((netIncome / expenses) * 100) : 0
+    const expensesRate = expenses > 0 ? Math.round((netIncome / expenses) * 100) : 0
 
     setSummary({
       income,
       expenses,
       netIncome,
       savingsRate,
-      expenseRate,
+      expensesRate,
     })
   }, [getFilteredTransactions])
 

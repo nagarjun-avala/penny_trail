@@ -3,7 +3,7 @@ import { LucideIcon } from "lucide-react";
 export type TrendData = {
     date: string;
     income: number;
-    expense: number;
+    expenses: number;
     net: number;
 };
 
@@ -18,7 +18,7 @@ export type Category = {
     name: string;
     icon?: string | LucideIcon;
     color: string;
-    type: "income" | "expense"; // enforce union;
+    type: "income" | "expenses"; // enforce union;
     createdAt: string;
 };
 
@@ -29,7 +29,7 @@ export type Transaction = {
     categoryId: string;
     amount: number;
     date: string; // YYYY-MM-DD
-    type: "income" | "expense";
+    type: "income" | "expenses";
     createdAt: string;
 };
 
@@ -62,7 +62,7 @@ export type RecurringTransaction = {
     id: string;
     description: string;
     amount: string;
-    type: "income" | "expense";
+    type: "income" | "expenses";
     categoryId: string;
     frequency: "daily" | "weekly" | "monthly" | "yearly";
     startDate: string;
@@ -105,4 +105,23 @@ export type trasanctionSummayType = {
     netIncome: number
     savingsRate: number
     expenseRate: number
+}
+
+export type ExpenseCategory = {
+    name: string
+    value: number
+    percentage: number
+    color: string
+}
+
+export type Trend = {
+    date: string
+    income: number
+    expenses: number
+}
+
+export type MonthlyData = {
+    month: string
+    income: number
+    expenses: number
 }

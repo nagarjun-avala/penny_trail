@@ -48,7 +48,7 @@ export default function TransactionForm({ transaction, onSuccess }: TransactionF
         defaultValues: {
             description: transaction?.description || "",
             amount: transaction?.amount || 0, // number (because schema coerces)
-            type: transaction?.type || "expense",
+            type: transaction?.type || "expenses",
             categoryId: transaction?.categoryId || "",
             date: transaction
                 ? formatDateForInput(transaction.date)
@@ -96,8 +96,8 @@ export default function TransactionForm({ transaction, onSuccess }: TransactionF
                                         <Label htmlFor="income">Income</Label>
                                     </div>
                                     <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="expense" id="expense" />
-                                        <Label htmlFor="expense">Expense</Label>
+                                        <RadioGroupItem value="expenses" id="expenses" />
+                                        <Label htmlFor="expenses">Expenses</Label>
                                     </div>
                                 </RadioGroup>
                             </FormControl>

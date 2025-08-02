@@ -1,7 +1,7 @@
 import { BriefcaseBusinessIcon, BusFrontIcon, ChartLineIcon, CirclePlusIcon, ClapperboardIcon, GraduationCapIcon, HeartPulseIcon, LaptopIcon, ReceiptTextIcon, ShoppingBagIcon, TicketsPlaneIcon, UtensilsIcon } from "lucide-react";
 import { Category } from "./types";
 
-export const CATEGORY_COLORS = [
+export const COPY_CATEGORY_COLORS = [
     "#F97316", // orange
     "#3B82F6", // blue
     "#8B5CF6", // purple
@@ -12,9 +12,19 @@ export const CATEGORY_COLORS = [
     "#6B7280", // gray
 ] as const;
 
+export const CATEGORY_COLORS: Record<string, string> = {
+    Food: "#EF4444",
+    Travel: "#F59E0B",
+    Bills: "#6366F1",
+    Shopping: "#EC4899",
+    Entertainment: "#8B5CF6",
+    Health: "#10B981",
+    Others: "#9CA3AF",
+}
+
 export const CHART_COLORS = {
     income: "#10B981",
-    expense: "#EF4444",
+    expenses: "#EF4444",
     primary: "#0ea5e9",
     secondary: "#64748b",
 } as const;
@@ -26,7 +36,7 @@ export const defaultCategories: Category[] = [
         name: "Food",
         icon: UtensilsIcon,
         color: "#F97316",
-        type: "expense",
+        type: "expenses",
         createdAt: "2025-07-31T19:09:52.481153"
     },
     {
@@ -34,7 +44,7 @@ export const defaultCategories: Category[] = [
         name: "Transportation",
         icon: BusFrontIcon,
         color: "#3B82F6",
-        type: "expense",
+        type: "expenses",
         createdAt: "2025-07-31T19:09:52.481156"
     },
     {
@@ -42,7 +52,7 @@ export const defaultCategories: Category[] = [
         name: "Entertainment",
         icon: ClapperboardIcon,
         color: "#8B5CF6",
-        type: "expense",
+        type: "expenses",
         createdAt: "2025-07-31T19:09:52.481157"
     },
     {
@@ -50,7 +60,7 @@ export const defaultCategories: Category[] = [
         name: "Healthcare",
         icon: HeartPulseIcon,
         color: "#EF4444",
-        type: "expense",
+        type: "expenses",
         createdAt: "2025-07-31T19:09:52.481158"
     },
     {
@@ -58,7 +68,7 @@ export const defaultCategories: Category[] = [
         name: "Shopping",
         icon: ShoppingBagIcon,
         color: "#F59E0B",
-        type: "expense",
+        type: "expenses",
         createdAt: "2025-07-31T19:09:52.481159"
     },
     {
@@ -66,7 +76,7 @@ export const defaultCategories: Category[] = [
         name: "Bills",
         icon: ReceiptTextIcon,
         color: "#6B7280",
-        type: "expense",
+        type: "expenses",
         createdAt: "2025-07-31T19:09:52.481160"
     },
     {
@@ -74,7 +84,7 @@ export const defaultCategories: Category[] = [
         name: "Education",
         icon: GraduationCapIcon,
         color: "#10B981",
-        type: "expense",
+        type: "expenses",
         createdAt: "2025-07-31T19:09:52.481161"
     },
     {
@@ -82,7 +92,7 @@ export const defaultCategories: Category[] = [
         name: "Travel",
         icon: TicketsPlaneIcon,
         color: "#06B6D4",
-        type: "expense",
+        type: "expenses",
         createdAt: "2025-07-31T19:09:52.481162"
     },
     {
@@ -114,7 +124,7 @@ export const defaultCategories: Category[] = [
         name: "Groceries",
         icon: "🛒",
         color: "#ef4444",
-        type: "expense",
+        type: "expenses",
         createdAt: "2025-07-31T19:09:52.481166"
     },
     {

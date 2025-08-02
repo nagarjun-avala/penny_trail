@@ -33,6 +33,7 @@ const TransactionsFilter = ({ filters, setFilters }: Props) => {
         <Card>
             <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    {/* Category Type Filter */}
                     <div>
                         <Label htmlFor="category-filter" className="mb-2">Category</Label>
                         <Select
@@ -67,6 +68,7 @@ const TransactionsFilter = ({ filters, setFilters }: Props) => {
                         </Select>
                     </div>
 
+                    {/* Transactiom (income | expenses ) Type Filter */}
                     <div>
                         <Label htmlFor="type-filter" className="mb-1">Type</Label>
                         <Select
@@ -81,11 +83,12 @@ const TransactionsFilter = ({ filters, setFilters }: Props) => {
                             <SelectContent>
                                 <SelectItem value="all">All Types</SelectItem>
                                 <SelectItem value="income">Income</SelectItem>
-                                <SelectItem value="expense">Expense</SelectItem>
+                                <SelectItem value="expenses">Expenses</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
 
+                    {/* From Date Type Filter */}
                     <div>
                         <Label htmlFor="start-date" className="mb-1">From Date</Label>
                         <Input
@@ -97,6 +100,7 @@ const TransactionsFilter = ({ filters, setFilters }: Props) => {
                         />
                     </div>
 
+                    {/* To Date Type Filter */}
                     <div>
                         <Label htmlFor="end-date" className="mb-1">To Date</Label>
                         <Input

@@ -1,10 +1,8 @@
 // components/overview.tsx
 "use client"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
-import { useIsMobile } from "@/hooks/use-mobile"
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -16,19 +14,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
-import { useEffect, useState } from "react"
 import { TrendData } from "@/lib/types"
+import { formatCurrency } from "@/lib/utils"
 
 const chartConfig = {
   spending: {
@@ -109,6 +96,7 @@ export function Overview({ data, days }: { data: TrendData[], days: string }) {
               cursor={false}
               content={
                 <ChartTooltipContent
+                  className="w-[200px]"
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",
@@ -127,7 +115,7 @@ export function Overview({ data, days }: { data: TrendData[], days: string }) {
               stackId="a"
             />
             <Area
-              dataKey="expense"
+              dataKey="expenses"
               type="natural"
               fill="#ffe2e2"
               stroke="oklch(57.7% 0.245 27.325)"

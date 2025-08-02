@@ -13,7 +13,7 @@ export const insertTransactionSchema = z.object({
     amount: z.coerce
         .number("Amount must be a number")
         .positive("Amount must be a positive number"),
-    type: z.enum(["income", "expense"]),
+    type: z.enum(["income", "expenses"]),
     categoryId: z.string().min(1, "Category is required"),
     date: z.string().min(1, "Date is required"),
 });

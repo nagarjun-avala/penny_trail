@@ -1,13 +1,14 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { format, isToday, isYesterday, differenceInDays, parseISO, subDays } from "date-fns"
+import { format, isToday, isYesterday, differenceInDays, parseISO } from "date-fns"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
 import { currencyService } from "./currency";
-import { defaultCategories } from "./contsants";
+import { CATEGORY_COLORS, defaultCategories } from "./contsants";
+import { ExpenseCategory, Transaction } from "./types";
 
 export function formatCurrency(amount: number | string): string {
   const num = typeof amount === "string" ? parseFloat(amount) : amount;
@@ -95,4 +96,52 @@ export function getCategoryMeta(categoryName: string) {
     color: category?.color ?? "#ccc",
     type: category?.type === "income" ? "income" : "expense"
   }
+}
+
+export function generateExpenseCategories(transactions: Transaction[]): ExpenseCategory[] {
+  const expenses = transactions.filter((t) => t.type === "expenses")
+
+  const totalExpenses = expenses.reduce((sum, t) => sum + t.amount, 0)
+
+  const categoryMap: Record<string, number> = {}
+
+  for (const tx of expenses) {
+    categoryMap[tx.category] = (categoryMap[tx.category] || 0) + tx.amount
+  }
+
+  return Object.entries(categoryMap).map(([name, value]) => ({
+    name,
+    value,
+    percentage: totalExpenses > 0 ? (value / totalExpenses) * 100 : 0,
+    color: CATEGORY_COLORS[name] || CATEGORY_COLORS["Others"],
+  }))
+}
+
+export function generateMonthlyData(trends: Trend[]): MonthlyData[] {
+  const monthlyMap = new Map<string, MonthlyData>()
+
+  for (const item of trends) {
+    const date = new Date(item.date)
+    const key = `${date.getFullYear()}-${date.getMonth()}` // e.g., "2025-6"
+
+    if (!monthlyMap.has(key)) {
+      monthlyMap.set(key, {
+        month: date.toLocaleDateString("en-US", { month: "short" }),
+        income: 0,
+        expenses: 0,
+      })
+    }
+
+    const current = monthlyMap.get(key)!
+    current.income += item.income
+    current.expenses += item.expenses
+  }
+
+  // Convert Map to array and sort chronologically
+  const sorted = Array.from(monthlyMap.entries())
+    .sort(([a], [b]) => (a > b ? 1 : -1))
+    .map(([_, value]) => value)
+
+  // Return only the last 6 months
+  return sorted.slice(-6)
 }

@@ -21,7 +21,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { SetStateAction, Dispatch } from 'react'
 import { Transaction } from '@/lib/types';
 
@@ -144,7 +144,7 @@ const TransactionsList = ({ transactions, setSelectedTransaction, setIsDialogOpe
                                 Try adjusting your filters or add your first transaction.
                             </p>
                             <Button onClick={handleAdd}>
-                                <i className="fas fa-plus mr-2"></i>Add Transaction
+                                <Plus className="mr-1" />Add Transaction
                             </Button>
                         </div>
                     )}
