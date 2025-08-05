@@ -45,7 +45,7 @@ export default function DashboardPage() {
       startDate.setDate(referenceDate.getDate() - Number(timeRange))
 
       return data.filter((item) => {
-        const date = new Date(item.date)
+        const date = new Date(item.createdAt)
         return date >= startDate && date <= referenceDate
       })
     },
@@ -84,13 +84,6 @@ export default function DashboardPage() {
     const calculatedChanges = calculateTrendChanges(trendData)
     setChanges(calculatedChanges)
   }, [transactions])
-
-
-
-  console.log("LOG :", {
-    trends,
-    transactions
-  })
 
   return (
     <div className="flex-1 space-y-4 md:p-8">

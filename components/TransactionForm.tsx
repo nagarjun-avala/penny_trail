@@ -50,8 +50,8 @@ export default function TransactionForm({ transaction, onSuccess }: TransactionF
             amount: transaction?.amount || 0, // number (because schema coerces)
             type: transaction?.type || "expenses",
             categoryId: transaction?.categoryId || "",
-            date: transaction
-                ? formatDateForInput(transaction.date)
+            createdAt: transaction
+                ? formatDateForInput(transaction.createdAt)
                 : formatDateForInput(new Date()),
         },
     });
@@ -181,7 +181,7 @@ export default function TransactionForm({ transaction, onSuccess }: TransactionF
 
                 <FormField
                     control={form.control}
-                    name="date"
+                    name="createdAt"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Date</FormLabel>

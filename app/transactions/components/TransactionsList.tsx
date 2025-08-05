@@ -75,7 +75,7 @@ const TransactionsList = ({ transactions, setSelectedTransaction, setIsDialogOpe
                             {transactions.map((transaction) => (
                                 <TableRow key={transaction.id} className="hover:bg-slate-50">
                                     <TableCell >
-                                        {formatDate(transaction.date)}
+                                        {formatDate(transaction.createdAt)}
                                     </TableCell>
                                     <TableCell >
                                         {transaction.description}

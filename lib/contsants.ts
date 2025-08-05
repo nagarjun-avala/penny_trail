@@ -1,5 +1,11 @@
-import { BriefcaseBusinessIcon, BusFrontIcon, ChartLineIcon, CirclePlusIcon, ClapperboardIcon, GraduationCapIcon, HeartPulseIcon, LaptopIcon, ReceiptTextIcon, ShoppingBagIcon, TicketsPlaneIcon, UtensilsIcon } from "lucide-react";
+import { BriefcaseBusinessIcon, BusFrontIcon, Car, ChartLineIcon, CirclePlusIcon, ClapperboardIcon, GraduationCapIcon, HeartPulseIcon, LaptopIcon, LucideIcon, ReceiptTextIcon, ShoppingBagIcon, TicketsPlaneIcon, UtensilsIcon } from "lucide-react";
 import { Category } from "./types";
+
+
+export const TRANSACTION_TYPES = {
+    INCOME: "income",
+    EXPENSE: "expense",
+} as const;
 
 export const COPY_CATEGORY_COLORS = [
     "#F97316", // orange
@@ -12,23 +18,13 @@ export const COPY_CATEGORY_COLORS = [
     "#6B7280", // gray
 ] as const;
 
-export const CATEGORY_COLORS: Record<string, string> = {
-    Food: "#EF4444",
-    Travel: "#F59E0B",
-    Bills: "#6366F1",
-    Shopping: "#EC4899",
-    Entertainment: "#8B5CF6",
-    Health: "#10B981",
-    Others: "#9CA3AF",
-}
 
 export const CHART_COLORS = {
     income: "#10B981",
     expenses: "#EF4444",
     primary: "#0ea5e9",
     secondary: "#64748b",
-} as const;
-
+};
 
 export const defaultCategories: Category[] = [
     {
@@ -135,5 +131,15 @@ export const defaultCategories: Category[] = [
         type: "income",
         createdAt: "2025-07-31T19:09:52.481167"
     }
-]
-    ;
+];
+
+export const DATE_FILTER_OPTIONS = [
+    { label: "This Month", value: "this_month", alwaysShow: true },
+    { label: "Last 6 Months", value: "last_6_months" },
+    { label: "Last Year", value: "last_year" },
+    { label: "Last 5 Years", value: "last_5_years" },
+    { label: "All Time", value: "all" },
+    { label: "Today", value: "today", alwaysShow: true },
+    { label: "This Week", value: "this_week", alwaysShow: true },
+    { label: "Custom Range", value: "custom", alwaysShow: true },
+];

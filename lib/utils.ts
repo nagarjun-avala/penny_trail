@@ -7,8 +7,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 import { currencyService } from "./currency";
-import { CATEGORY_COLORS, defaultCategories } from "./contsants";
-import { ExpenseCategory, Transaction } from "./types";
+import { defaultCategories } from "./contsants";
+import { Category, CategoryWithStats, ExpenseCategory, MonthlyData, Transaction, Trend } from "./types";
 
 export function formatCurrency(amount: number | string): string {
   const num = typeof amount === "string" ? parseFloat(amount) : amount;
@@ -113,7 +113,8 @@ export function generateExpenseCategories(transactions: Transaction[]): ExpenseC
     name,
     value,
     percentage: totalExpenses > 0 ? (value / totalExpenses) * 100 : 0,
-    color: CATEGORY_COLORS[name] || CATEGORY_COLORS["Others"],
+    color: defaultCategories.find(cat => cat.name === name)?.color ??
+      defaultCategories[defaultCategories.length - 1].color,
   }))
 }
 
@@ -144,4 +145,42 @@ export function generateMonthlyData(trends: Trend[]): MonthlyData[] {
 
   // Return only the last 6 months
   return sorted.slice(-6)
+}
+
+export function fetchCategoriesWithStats(
+  transactions: Transaction[],
+  categories: Category[]
+): CategoryWithStats[] {
+  // Step 1: Build stats for each category
+  const categoriesWithStats: CategoryWithStats[] = categories.map((category) => {
+    const relevantTxns = transactions.filter(
+      (txn) => txn.category === category.name && txn.type === category.type
+    );
+
+    const transactionCount = relevantTxns.length;
+    const totalAmount = relevantTxns.reduce((sum, txn) => sum + txn.amount, 0);
+    const avgAmount = transactionCount > 0 ? totalAmount / transactionCount : 0;
+
+    return {
+      ...category,
+      transactionCount,
+      totalAmount: totalAmount.toFixed(2),
+      avgAmount: avgAmount.toFixed(2),
+      percentage: 0, // frontend will compute it next
+    };
+  });
+
+  // Step 2: Calculate percentage contribution for each category
+  const totalExpenses = categoriesWithStats.reduce(
+    (sum, cat) => sum + parseFloat(cat.totalAmount),
+    0
+  );
+
+  return categoriesWithStats.map((cat) => ({
+    ...cat,
+    percentage:
+      totalExpenses > 0
+        ? (parseFloat(cat.totalAmount) / totalExpenses) * 100
+        : 0,
+  }));
 }

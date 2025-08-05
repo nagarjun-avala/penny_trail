@@ -43,9 +43,9 @@ export default function TransactionsPage() {
         const categoryMatch = !filters.category || t.category === filters.category;
         const typeMatch = !filters.type || t.type === filters.type;
         const startDateMatch =
-            !filters.startDate || new Date(t.date) >= new Date(filters.startDate);
+            !filters.startDate || new Date(t.createdAt) >= new Date(filters.startDate);
         const endDateMatch =
-            !filters.endDate || new Date(t.date) <= new Date(filters.endDate);
+            !filters.endDate || new Date(t.createdAt) <= new Date(filters.endDate);
         return categoryMatch && typeMatch && startDateMatch && endDateMatch;
     });
 

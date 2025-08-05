@@ -15,7 +15,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { TrendData } from "@/lib/types"
-import { formatCurrency } from "@/lib/utils"
 
 const chartConfig = {
   spending: {

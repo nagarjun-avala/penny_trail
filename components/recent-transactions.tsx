@@ -1,15 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { defaultCategories } from "@/lib/contsants"
+import { Transaction } from "@/lib/types"
 import { formatCurrency, getRelativeDate } from "@/lib/utils"
 import React from "react"
-
-interface Transaction {
-    id: string
-    description: string
-    category: string
-    amount: number
-    date: string
-}
 
 const categoryMap = new Map(defaultCategories.map(c => [c.name, c]))
 
@@ -52,7 +45,7 @@ export const RecentTransactions = React.memo(function RecentTransactions({
                                     <div>
                                         <p className="text-sm font-medium leading-none">{tx.description}</p>
                                         <p className="text-sm text-muted-foreground">
-                                            {tx.category} • {tx.date ? getRelativeDate(tx.date) : "No date"}
+                                            {tx.category} • {tx.createdAt ? getRelativeDate(tx.createdAt) : "No date"}
                                         </p>
                                     </div>
                                 </div>

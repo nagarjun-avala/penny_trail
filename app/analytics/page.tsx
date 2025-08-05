@@ -76,7 +76,7 @@ export default function Analytics() {
         const groupedByDay: Record<string, { income: number; expenses: number }> =
             {};
         transactions.forEach((t) => {
-            const key = new Date(t.date).toISOString().split("T")[0];
+            const key = new Date(t.createdAt).toISOString().split("T")[0];
             if (!groupedByDay[key]) {
                 groupedByDay[key] = { income: 0, expenses: 0 };
             }
@@ -131,7 +131,7 @@ export default function Analytics() {
     const spendingTrends = useMemo(() => {
         const map: Record<string, { income: number; expenses: number }> = {};
         transactions.forEach((t) => {
-            const key = new Date(t.date).toISOString().split("T")[0];
+            const key = new Date(t.createdAt).toISOString().split("T")[0];
             if (!map[key]) map[key] = { income: 0, expenses: 0 };
             if (t.type === "income") {
                 map[key].income += t.amount;
@@ -146,11 +146,6 @@ export default function Analytics() {
     }, [transactions]);
 
     const monthlyData = generateMonthlyData(spendingTrends)
-
-    console.log("ANLYTICS PAGE LOG:\n", {
-        summary, pieData,
-        spendingTrends
-    })
 
     return (
         <div className="space-y-8">

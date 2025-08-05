@@ -14,7 +14,7 @@ export function generateTrends(
     }
 
     for (const tx of transactions) {
-        const date = tx.date;
+        const date = tx.createdAt;
         const type = categoryTypeMap[tx.category] ?? "expense"; // fallback to expense
 
         if (!dateMap[date]) {

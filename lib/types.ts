@@ -1,17 +1,5 @@
 import { LucideIcon } from "lucide-react";
 
-export type TrendData = {
-    date: string;
-    income: number;
-    expenses: number;
-    net: number;
-};
-
-// Extended types
-export type TransactionWithCategory = Transaction & {
-    category: Category;
-};
-
 // Base types
 export type Category = {
     id: string;
@@ -28,7 +16,6 @@ export type Transaction = {
     category: string;
     categoryId: string;
     amount: number;
-    date: string; // YYYY-MM-DD
     type: "income" | "expenses";
     createdAt: string;
 };
@@ -72,7 +59,45 @@ export type RecurringTransaction = {
     createdAt: string;
 };
 
+export type trasanctionSummayType = {
+    income: number
+    expenses: number
+    netIncome: number
+    savingsRate: number
+    expenseRate: number
+}
 
+export type ExpenseCategory = {
+    name: string
+    value: number
+    percentage: number
+    color: string
+}
+
+// ! remove TrendData type (Trend and TrendData are almost same:- net: number [Add it to Trend])
+export type Trend = {
+    date: string
+    income: number
+    expenses: number
+}
+
+export type TrendData = {
+    date: string;
+    income: number;
+    expenses: number;
+    net: number;
+};
+
+export type MonthlyData = {
+    month: string
+    income: number
+    expenses: number
+}
+
+// Extended types for API responses
+export type TransactionWithCategory = Transaction & {
+    category: Category;
+};
 
 export type CategoryWithStats = Category & {
     transactionCount: number;
@@ -99,29 +124,12 @@ export type GoalWithProgress = Goal & {
     monthlyTarget?: string;
 };
 
-export type trasanctionSummayType = {
-    income: number
-    expenses: number
-    netIncome: number
-    savingsRate: number
-    expenseRate: number
-}
-
-export type ExpenseCategory = {
-    name: string
-    value: number
-    percentage: number
-    color: string
-}
-
-export type Trend = {
-    date: string
-    income: number
-    expenses: number
-}
-
-export type MonthlyData = {
-    month: string
-    income: number
-    expenses: number
-}
+export type DateFilterValue =
+    | "this_month"
+    | "last_6_months"
+    | "last_year"
+    | "last_5_years"
+    | "today"
+    | "this_week"
+    | "custom"
+    | "all";
