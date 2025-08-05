@@ -1,12 +1,140 @@
-# Personal Finance Tracker - Penny Trail
+# 💰 Personal Finance Tracker - Penny Trail
 
 ## Overview
 
 Penny Trail is a full-stack personal finance tracking application built with a modern tech stack. The application allows users to track their income and expenses, categorize transactions, view analytics with charts, and generate reports. It features a responsive design with both desktop and mobile interfaces, providing comprehensive financial management capabilities through an intuitive dashboard.
 
+- Create and manage spending categories
+- Set budgets for specific periods
+- Track spending progress visually
+- Filter transactions by date (e.g., this month, custom range)
+
+---
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+
+## 🧭 App Routes & Pages
+
+### `/`
+
+**Dashboard (optional landing)**
+
+- Summarizes budget status, total spent vs budgeted, recent transactions.
+- Provides quick access to core features.
+
+> _Not implemented yet in this version._
+
+---
+
+### `/categories`
+
+**Manage Categories**
+
+- Create, edit, or delete categories for organizing expenses and income.
+- Categories include name, color, icon, and type (income or expenses).
+- Transactions are grouped under these categories.
+
+🔍 Features:
+
+- Date filtering (This Month, Last 6 Months, etc.)
+- Transaction counts & amount stats per category
+- Progress bars for visual insights
+- Uses `shadcn/ui` components and icons
+
+---
+
+### `/budgets`
+
+**Budgets Page**
+
+- Set a budget for a specific category over a period (monthly, yearly, etc.)
+- View amount spent, remaining, and percent used
+- Visual progress bars with warning indicators
+
+📊 Features:
+
+- Budget creation dialog using `BudgetForm`
+- Edit and delete budgets
+- Visual budget status: Good, Warning, Exceeded
+- Fully uses local dummy data for display
+
+---
+
+### `* (404)`
+
+**Not Found Page**
+
+- Simple and modern page for non-existent routes.
+- Uses `AlertTriangle` icon and consistent styling.
+- Link to return to homepage.
+
+---
+
+## 📁 Folder Structure
+
+```
+/components
+  └── ui/              → shadcn-based UI components
+  └── forms/           → Form components like BudgetForm
+  └── CategoryForm.tsx
+  └── Calendar.tsx     → Calendar picker (shadcn)
+
+/app
+  └── page.tsx   → DashboardPage
+  └── layout.tsx   → Site Layout
+  └── not-found.tsx    → 404 page
+  └── Transactions
+  |   └── page.tsx   → TransactionsPage
+  └── Categories
+  |   └── page.tsx   → CategoriesPage
+  └── Analytics
+      └── page.tsx   → AnalyticsPage
+
+/lib
+  └── utils.ts         → Utility functions (e.g. formatCurrency)
+  └── constants.ts     → Static data like defaultCategories
+  └── types.ts         → Type definitions
+```
+
+---
+
+## 🧪 Data & Logic
+
+- All data is frontend only (`dummyTransactions`, `defaultCategories`, etc.)
+- State managed with `useState`, `useEffect`, and `useMemo`
+- TypeScript enforced via `Budget`, `Category`, and `BudgetWithCategory` types
+- Includes logic to calculate spent, remaining, and percent used
+
+---
+
+## 🛠 Technologies Used
+
+- React + TypeScript
+- Next.js (App or Pages router)
+- TailwindCSS
+- shadcn/ui for component styling
+- Lucide for modern icons
+
+---
+
+## 📌 Coming Soon (Ideas)
+
+- Add persistent backend (e.g., MongoDB, PostgreSQL)
+- User login & authentication
+- Export/Import budgets & data
+- Dashboard analytics with charts
+
+---
+
+## 📃 License
+
+MIT License — free to use, hack, and expand as you like.
+
+---
+
+> Made with ☕, 💻, and a sprinkle of shadcn/ui goodness.
 
 ## System Architecture
 

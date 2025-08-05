@@ -16,8 +16,6 @@ import {
     Pie,
     Cell,
     Tooltip,
-    LineChart,
-    Line,
     XAxis,
     YAxis,
     CartesianGrid,

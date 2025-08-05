@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import CurrencySelector from "@/components/CurrencySelector";
 import Link from "next/link";
-import { ArrowLeftRightIcon, CalculatorIcon, ChartLineIcon, ChartNoAxesCombinedIcon, GoalIcon, Menu, ScrollTextIcon, TagsIcon } from "lucide-react";
+import { Menu } from "lucide-react";
 import { navigation } from "@/lib/contsants";
 
 export default function MobileHeader() {

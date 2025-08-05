@@ -1,14 +1,13 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { format, isToday, isYesterday, differenceInDays, parseISO } from "date-fns"
+import { currencyService } from "./currency";
+import { defaultCategories } from "./contsants";
+import { Category, CategoryWithStats, ExpenseCategory, MonthlyData, Transaction, Trend } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
-
-import { currencyService } from "./currency";
-import { defaultCategories } from "./contsants";
-import { Category, CategoryWithStats, ExpenseCategory, MonthlyData, Transaction, Trend } from "./types";
 
 export function formatCurrency(amount: number | string): string {
   const num = typeof amount === "string" ? parseFloat(amount) : amount;
@@ -57,35 +56,6 @@ export function getRelativeDate(dateStr: string): string {
   if (diff < 7) return `${diff} days ago`
 
   return format(date, "dd MMM yyyy") // Example: 31 Jul 2025
-}
-
-export function exportToCSV(data: any[], filename: string): void {
-  if (data.length === 0) return;
-
-  const headers = Object.keys(data[0]);
-  const csvContent = [
-    headers.join(','),
-    ...data.map(row => headers.map(header => {
-      const value = row[header];
-      // Escape commas and quotes in CSV
-      if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
-        return `"${value.replace(/"/g, '""')}"`;
-      }
-      return value;
-    }).join(','))
-  ].join('\n');
-
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', filename);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
 }
 
 
