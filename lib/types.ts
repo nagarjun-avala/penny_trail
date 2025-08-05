@@ -21,16 +21,7 @@ export type Transaction = {
 };
 
 
-export type Budget = {
-    id: string;
-    categoryId: string;
-    amount: string;
-    period: "weekly" | "monthly" | "yearly";
-    startDate: string;
-    endDate?: string;
-    isActive: boolean;
-    createdAt: string;
-};
+
 
 export type Goal = {
     id: string;
@@ -106,13 +97,6 @@ export type CategoryWithStats = Category & {
     percentage: number;
 };
 
-export type BudgetWithCategory = Budget & {
-    category: Category;
-    spent: string;
-    remaining: string;
-    percentageUsed: number;
-};
-
 export type RecurringTransactionWithCategory = RecurringTransaction & {
     category: Category;
 };
@@ -123,6 +107,7 @@ export type GoalWithProgress = Goal & {
     daysRemaining?: number;
     monthlyTarget?: string;
 };
+
 
 export type DateFilterValue =
     | "this_month"

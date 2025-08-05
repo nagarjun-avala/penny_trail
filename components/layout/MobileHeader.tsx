@@ -6,16 +6,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import CurrencySelector from "@/components/CurrencySelector";
 import Link from "next/link";
 import { ArrowLeftRightIcon, CalculatorIcon, ChartLineIcon, ChartNoAxesCombinedIcon, GoalIcon, Menu, ScrollTextIcon, TagsIcon } from "lucide-react";
-
-const navigation = [
-    { name: "Dashboard", href: "/", icon: ChartLineIcon },
-    { name: "Transactions", href: "/transactions", icon: ArrowLeftRightIcon },
-    { name: "Analytics", href: "/analytics", icon: ChartNoAxesCombinedIcon },
-    { name: "Categories", href: "/categories", icon: TagsIcon },
-    { name: "Budgets", href: "/budgets", icon: CalculatorIcon },
-    { name: "Goals", href: "/goals", icon: GoalIcon },
-    { name: "Reports", href: "/reports", icon: ScrollTextIcon },
-];
+import { navigation } from "@/lib/contsants";
 
 export default function MobileHeader() {
     const pathname = usePathname()

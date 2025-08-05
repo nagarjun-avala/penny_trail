@@ -1,10 +1,16 @@
-import { BriefcaseBusinessIcon, BusFrontIcon, Car, ChartLineIcon, CirclePlusIcon, ClapperboardIcon, GraduationCapIcon, HeartPulseIcon, LaptopIcon, LucideIcon, ReceiptTextIcon, ShoppingBagIcon, TicketsPlaneIcon, UtensilsIcon } from "lucide-react";
+import { ArrowLeftRightIcon, BriefcaseBusinessIcon, BusFrontIcon, ChartLineIcon, ChartNoAxesCombinedIcon, CirclePlusIcon, ClapperboardIcon, GraduationCapIcon, HeartPulseIcon, LaptopIcon, ReceiptTextIcon, ShoppingBagIcon, TagsIcon, TicketsPlaneIcon, UtensilsIcon } from "lucide-react";
 import { Category } from "./types";
 
+export const navigation = [
+    { name: "Dashboard", href: "/", icon: ChartLineIcon },
+    { name: "Transactions", href: "/transactions", icon: ArrowLeftRightIcon },
+    { name: "Analytics", href: "/analytics", icon: ChartNoAxesCombinedIcon },
+    { name: "Categories", href: "/categories", icon: TagsIcon },
+];
 
 export const TRANSACTION_TYPES = {
     INCOME: "income",
-    EXPENSE: "expense",
+    EXPENSE: "expenses",
 } as const;
 
 export const COPY_CATEGORY_COLORS = [
