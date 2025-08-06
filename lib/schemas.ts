@@ -22,7 +22,6 @@ export const insertTransactionSchema = z.object({
     amount: amountField,
     type: z.enum(["income", "expense"]),
     categoryId: z.string().min(1, "Category is required"),
-    createdAt: z.string().min(1, "Date is required"),
     notes: z.string().optional(),
 });
 

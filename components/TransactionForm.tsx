@@ -1,49 +1,47 @@
 "use client";
 
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import z from "zod";
 
+import { insertTransactionSchema } from "@/lib/schemas";
+import { createTrasaction } from "@/lib/fetch";
+import { getLucideIcon } from "@/lib/utils";
+import { Category, Transaction } from "@/lib/types";
+
+import {
+    Form, FormField, FormItem, FormLabel,
+    FormControl, FormMessage,
+} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import {
-    RadioGroup,
-    RadioGroupItem,
+    RadioGroup, RadioGroupItem,
 } from "@/components/ui/radio-group";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { getLucideIcon } from "@/lib/utils";
-import React, { useState } from "react";
-import { Category, Transaction } from "@/lib/types";
-import { insertTransactionSchema } from "@/lib/schemas";
-import { toast } from "sonner";
-import z from "zod";
-import { createTrasaction } from "@/lib/fetch";
-
+    Select, SelectContent, SelectItem,
+    SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 
 interface TransactionFormProps {
     transaction?: Transaction;
-    categories: Category[]
+    categories: Category[];
     onSuccess?: () => void;
+    onSave?: (newTx: Transaction) => void; // 🧠 new prop
 }
 
 
-export default function TransactionForm({ transaction, categories, onSuccess }: TransactionFormProps) {
+export default function TransactionForm({
+    transaction,
+    categories,
+    onSuccess,
+    onSave,
+}: TransactionFormProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [selectedType, setSelectedType] = useState("expense");
+    const [selectedType, setSelectedType] = useState(transaction?.type || "expense");
 
     const form = useForm({
         resolver: zodResolver(insertTransactionSchema),
@@ -55,52 +53,100 @@ export default function TransactionForm({ transaction, categories, onSuccess }: 
             categoryId: transaction?.categoryId || "",
         },
     });
+
     const onSubmit = async (data: z.infer<typeof insertTransactionSchema>) => {
         setIsSubmitting(true);
-        const res = await createTrasaction(data)
-        console.log(res)
-        toast.success("Success", {
-            description: transaction ? "Transaction updated" : "Transaction created",
-        });
-
-        form.reset();
-        onSuccess?.();
-        setIsSubmitting(false);
+        try {
+            const savedTx = await createTrasaction(data);
+            toast.success("Transaction saved!");
+            form.reset();
+            onSave?.(savedTx); // 🔥 Pass saved transaction to parent
+            onSuccess?.();
+        } catch {
+            toast.error("Something went wrong");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
+
 
     return (
         <Form {...form}>
-            <form className="space-y-4">
-                <FormField
-                    control={form.control}
-                    name="type"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Type</FormLabel>
-                            <FormControl>
-                                <RadioGroup
-                                    onValueChange={(e) => {
-                                        field.onChange(e)
-                                        setSelectedType(e)
-                                    }}
-                                    defaultValue={field.value}
-                                    className="flex space-x-4"
-                                >
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="income" id="income" />
-                                        <Label htmlFor="income">Income</Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="expense" id="expense" />
-                                        <Label htmlFor="expense">Expense</Label>
-                                    </div>
-                                </RadioGroup>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
+            <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="grid gap-4 sm:grid-cols-2">
+                    {/* Type Selector */}
+                    <FormField
+                        control={form.control}
+                        name="type"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Type</FormLabel>
+                                <FormControl>
+                                    <RadioGroup
+                                        onValueChange={(e) => {
+                                            field.onChange(e);
+                                            setSelectedType(e as "income" | "expense");
+                                        }}
+                                        defaultValue={field.value}
+                                        className="flex space-x-4"
+                                    >
+                                        {["income", "expense"].map((value) => (
+                                            <div key={value} className="flex flex-col space-y-1 sm:space-x-4 sm:flex-row"
+                                            >
+                                                <RadioGroupItem value={value} id={value} />
+                                                <Label htmlFor={value}>{value[0].toUpperCase() + value.slice(1)}</Label>
+                                            </div>
+                                        ))}
+                                    </RadioGroup>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    {/* Category */}
+                    <FormField
+                        control={form.control}
+                        name="categoryId"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Category</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select category" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent className="flex flex-col space-y-1 sm:space-x-4 sm:flex-row"
+                                    >
+                                        {categories
+                                            .filter((cat) => cat.type === selectedType)
+                                            .map((cat) => {
+                                                const Icon = getLucideIcon(cat.icon);
+                                                return (
+                                                    <SelectItem key={cat.id} value={cat.id}>
+                                                        <div className="flex items-center space-x-2">
+                                                            <div
+                                                                className="w-9 h-9 flex items-center justify-center rounded-md text-lg"
+                                                                style={{
+                                                                    backgroundColor: `${cat.color}20`,
+                                                                    color: cat.color,
+                                                                }}
+                                                            >
+                                                                <Icon />
+                                                            </div>
+                                                            <span>{cat.name}</span>
+                                                        </div>
+                                                    </SelectItem>
+                                                );
+                                            })}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                {/* Description */}
                 <FormField
                     control={form.control}
                     name="description"
@@ -115,44 +161,8 @@ export default function TransactionForm({ transaction, categories, onSuccess }: 
                     )}
                 />
 
-                <FormField
-                    control={form.control}
-                    name="categoryId"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Category</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select category" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {categories.filter(cat => cat.type === selectedType).map((category) => {
-                                        const Icon = getLucideIcon(category.icon);
-                                        return <SelectItem
-                                            key={category.id}
-                                            value={category.id}
-                                        >
-                                            <div className="flex items-center space-x-2">
-                                                <div
-                                                    className="w-9 h-9 flex items-center justify-center rounded-md text-lg"
-                                                    style={{ backgroundColor: `${category.color}20`, color: category.color }}
-                                                >
-                                                    <Icon />
-                                                </div>
-                                                <span>{category.name}</span>
-                                            </div>
-                                        </SelectItem>
-                                    })}
 
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
+                {/* Amount */}
                 <FormField
                     control={form.control}
                     name="amount"
@@ -167,23 +177,32 @@ export default function TransactionForm({ transaction, categories, onSuccess }: 
                                     {...field}
                                     value={field.value as number | string}
                                 />
-
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+
+                {/* Buttons */}
                 <div className="flex space-x-3 pt-4">
-                    <Button type="button" variant="outline" className="flex-1" onClick={() => onSuccess?.()}>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className="flex-1"
+                        onClick={onSuccess}
+                    >
                         Cancel
                     </Button>
                     <Button
                         type="submit"
                         className="flex-1"
                         disabled={isSubmitting}
-                        onClick={form.handleSubmit(onSubmit)}
                     >
-                        {isSubmitting ? "Saving..." : transaction ? "Update Transaction" : "Add Transaction"}
+                        {isSubmitting
+                            ? "Saving..."
+                            : transaction
+                                ? "Update Transaction"
+                                : "Add Transaction"}
                     </Button>
                 </div>
             </form>

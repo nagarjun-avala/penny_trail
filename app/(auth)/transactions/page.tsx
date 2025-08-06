@@ -31,25 +31,42 @@ export default function TransactionsPage() {
         endDate: "",
     });
 
+    const fetchData = useCallback(async () => {
+        setLoading(true); // ✅ Always reset to true before fetch
+        try {
+            const [categories, trasactions] = await Promise.all([
+                getCategories(),
+                getTrasactions(),
+            ]);
+            setTransactions(trasactions);
+            setCategories(categories);
+        } catch (error) {
+            console.error("❌ Failed to fetch data:", error);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+
+
     // 🔄 Fetch data on mount
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [categories, trasactions] = await Promise.all([
-                    getCategories(),
-                    getTrasactions(),
-                ]);
-                setTransactions(trasactions);
-                setCategories(categories);
-            } catch (error) {
-                console.error("❌ Failed to fetch data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
+    }, [fetchData]);
+
+    const handleTransactionSave = useCallback((newTx: Transaction) => {
+        setTransactions((prev) => {
+            const exists = prev.find((t) => t.id === newTx.id);
+            if (exists) {
+                // 🛠️ Edit mode: replace
+                return prev.map((t) => (t.id === newTx.id ? newTx : t));
+            }
+            // ➕ Add mode: append
+            return [newTx, ...prev];
+        });
     }, []);
+
+
 
     // ➕ Add button handler
     const handleAdd = useCallback(() => {
@@ -60,7 +77,8 @@ export default function TransactionsPage() {
     const handleDialogClose = useCallback(() => {
         setSelectedTransaction(undefined);
         setIsDialogOpen(false);
-    }, []);
+        fetchData(); // 🚀 Refresh the data
+    }, [fetchData]);
 
     // 🧠 Memoized filtered transactions
     const filteredTransactions = useMemo(() => {
@@ -108,7 +126,9 @@ export default function TransactionsPage() {
                             transaction={selectedTransaction}
                             categories={categories}
                             onSuccess={handleDialogClose}
+                            onSave={handleTransactionSave} // 🧠 add this
                         />
+
                     </DialogContent>
                 </Dialog>
             </div>

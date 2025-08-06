@@ -1,6 +1,6 @@
 // app/api/transaction/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getServerSession } from "@/lib/getServerSession";
 import { db } from "@/lib/db";
 

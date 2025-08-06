@@ -62,7 +62,7 @@ export default function DashboardPage() {
       .reduce((sum, t) => sum + t.amount, 0)
 
     const expenses = filtered
-      .filter((t) => t.type === "expenses")
+      .filter((t) => t.type === "expense")
       .reduce((sum, t) => sum + t.amount, 0)
 
     const netIncome = income - expenses

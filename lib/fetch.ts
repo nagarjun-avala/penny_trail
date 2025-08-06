@@ -19,11 +19,10 @@ export const getTrasactions = async () => {
     }
 }
 
-
-export const createTrasaction = async (transaction: Partial<Transaction>) => {
+export const createTrasaction = async (transaction: Partial<Transaction>): Promise<Transaction> => {
     try {
         const res = await postData("/api/transaction", transaction);
-        return res
+        return res as Transaction
     } catch {
         throw new Error("Falied to create trasaction")
     }
