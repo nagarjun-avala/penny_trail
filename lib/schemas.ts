@@ -1,4 +1,3 @@
-import { LucideIcon } from "lucide-react";
 import { z } from "zod";
 
 // Common reusable amount validator
@@ -9,8 +8,9 @@ const amountField = z
 
 // 🔷 Category Schema
 export const insertCategorySchema = z.object({
+    id: z.string(),
     name: z.string().min(1, "Category name is required"),
-    icon: z.union([z.string(), z.custom<LucideIcon>()]),
+    icon: z.string(),
     color: z.string().min(1, "Color is required"),
     type: z.enum(["income", "expense"]),
 });
