@@ -1,6 +1,4 @@
 import { JWTPayload } from "jose";
-import { LucideIcon } from "lucide-react";
-
 // Authentication Types
 export interface SessionPayload extends JWTPayload {
     id: string;

@@ -66,7 +66,7 @@ export default function Analytics() {
             .filter((t) => t.type === "income")
             .reduce((sum, t) => sum + t.amount, 0);
         const expenses = transactions
-            .filter((t) => t.type === "expenses")
+            .filter((t) => t.type === "expense")
             .reduce((sum, t) => sum + t.amount, 0);
         const netIncome = income - expenses;
         const savingsRate = income > 0 ? Math.round((netIncome / income) * 100) : 0;
@@ -80,7 +80,7 @@ export default function Analytics() {
             }
             if (t.type === "income") {
                 groupedByDay[key].income += t.amount;
-            } else if (t.type === "expenses") {
+            } else if (t.type === "expense") {
                 groupedByDay[key].expenses += t.amount;
             }
         });
@@ -90,11 +90,11 @@ export default function Analytics() {
             Object.keys(groupedByDay).length;
 
         const topCategory = categories
-            .filter((c) => c.type === "expenses")
+            .filter((c) => c.type === "expense")
             .map((c) => ({
                 ...c,
                 total: transactions
-                    .filter((t) => t.category === c.name)
+                    .filter((t) => t.category.id === c.id)
                     .reduce((s, t) => s + t.amount, 0),
             }))
             .sort((a, b) => b.total - a.total)[0]?.name;
@@ -112,10 +112,10 @@ export default function Analytics() {
 
     const pieData = useMemo(() => {
         return categories
-            .filter((cat) => cat.type === "expenses")
+            .filter((cat) => cat.type === "expense")
             .map((cat, index) => {
                 const totalAmount = transactions
-                    .filter((t) => t.category === cat.name)
+                    .filter((t) => t.category.id === cat.id)
                     .reduce((sum, t) => sum + t.amount, 0);
                 return {
                     name: cat.name,
@@ -133,7 +133,7 @@ export default function Analytics() {
             if (!map[key]) map[key] = { income: 0, expenses: 0 };
             if (t.type === "income") {
                 map[key].income += t.amount;
-            } else if (t.type === "expenses") {
+            } else if (t.type === "expense") {
                 map[key].expenses += t.amount;
             }
         });
