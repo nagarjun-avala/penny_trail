@@ -12,14 +12,15 @@ export const insertCategorySchema = z.object({
     name: z.string().min(1, "Category name is required"),
     icon: z.union([z.string(), z.custom<LucideIcon>()]),
     color: z.string().min(1, "Color is required"),
-    type: z.enum(["income", "expenses"]),
+    type: z.enum(["income", "expense"]),
 });
 
 // 🔷 Transaction Schema
 export const insertTransactionSchema = z.object({
     description: z.string().optional(),
+    note: z.string().optional(),
     amount: amountField,
-    type: z.enum(["income", "expenses"]),
+    type: z.enum(["income", "expense"]),
     categoryId: z.string().min(1, "Category is required"),
     createdAt: z.string().min(1, "Date is required"),
     notes: z.string().optional(),

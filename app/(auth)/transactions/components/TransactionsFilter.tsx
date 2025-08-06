@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Select,
@@ -9,25 +9,27 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { defaultCategories } from "@/lib/contsants";
 import { X } from "lucide-react";
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
+import { Category } from "@/lib/types";
+import { getLucideIcon } from "@/lib/utils";
 
 type Filter = {
-    category: string
-    type: string
-    startDate: string
-    endDate: string
-}
+    categoryId: string;
+    type: string;
+    startDate: string;
+    endDate: string;
+};
 
 type Props = {
-    filters: Filter
-    setFilters: Dispatch<SetStateAction<Filter>>
-}
+    filters: Filter;
+    categories: Category[];
+    setFilters: Dispatch<SetStateAction<Filter>>;
+};
 
-const TransactionsFilter = ({ filters, setFilters }: Props) => {
+const TransactionsFilter = ({ filters, categories, setFilters }: Props) => {
     const clearFilters = () => {
-        setFilters({ category: "", type: "", startDate: "", endDate: "" });
+        setFilters({ categoryId: "", type: "", startDate: "", endDate: "" });
     };
     return (
         <Card>
@@ -35,11 +37,13 @@ const TransactionsFilter = ({ filters, setFilters }: Props) => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                     {/* Category Type Filter */}
                     <div>
-                        <Label htmlFor="category-filter" className="mb-2">Category</Label>
+                        <Label htmlFor="category-filter" className="mb-2">
+                            Category
+                        </Label>
                         <Select
-                            value={filters.category}
+                            value={filters.categoryId}
                             onValueChange={(value) =>
-                                setFilters((prev) => ({ ...prev, category: value }))
+                                setFilters((prev) => ({ ...prev, categoryId: value }))
                             }
                         >
                             <SelectTrigger>
@@ -47,30 +51,34 @@ const TransactionsFilter = ({ filters, setFilters }: Props) => {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">All Categories</SelectItem>
-                                {defaultCategories
+                                {categories
                                     .filter((cat) => cat.id && cat.id.trim() !== "")
-                                    .map((category) => (
-                                        <SelectItem key={category.id} value={category.id}>
-                                            <div
-                                                className="w-9 h-9 flex items-center justify-center rounded-md text-lg"
-                                                style={{ backgroundColor: `${category.color}20`, color: category.color }}
-                                            >
-                                                {typeof category.icon === "string" ? (
-                                                    category.icon
-                                                ) : category.icon ? (
-                                                    React.createElement(category.icon)
-                                                ) : null}
-                                            </div>
-                                            {category.name}
-                                        </SelectItem>
-                                    ))}
+                                    .map((category) => {
+                                        const Icon = getLucideIcon(category.icon);
+                                        return (
+                                            <SelectItem key={category.id} value={category.id}>
+                                                <div
+                                                    className="w-9 h-9 flex items-center justify-center rounded-md text-lg"
+                                                    style={{
+                                                        backgroundColor: `${category.color}20`,
+                                                        color: category.color,
+                                                    }}
+                                                >
+                                                    <Icon />
+                                                </div>
+                                                {category.name}
+                                            </SelectItem>
+                                        );
+                                    })}
                             </SelectContent>
                         </Select>
                     </div>
 
                     {/* Transactiom (income | expenses ) Type Filter */}
                     <div>
-                        <Label htmlFor="type-filter" className="mb-1">Type</Label>
+                        <Label htmlFor="type-filter" className="mb-1">
+                            Type
+                        </Label>
                         <Select
                             value={filters.type}
                             onValueChange={(value) =>
@@ -90,7 +98,9 @@ const TransactionsFilter = ({ filters, setFilters }: Props) => {
 
                     {/* From Date Type Filter */}
                     <div>
-                        <Label htmlFor="start-date" className="mb-1">From Date</Label>
+                        <Label htmlFor="start-date" className="mb-1">
+                            From Date
+                        </Label>
                         <Input
                             type="date"
                             value={filters.startDate}
@@ -102,7 +112,9 @@ const TransactionsFilter = ({ filters, setFilters }: Props) => {
 
                     {/* To Date Type Filter */}
                     <div>
-                        <Label htmlFor="end-date" className="mb-1">To Date</Label>
+                        <Label htmlFor="end-date" className="mb-1">
+                            To Date
+                        </Label>
                         <Input
                             type="date"
                             value={filters.endDate}
@@ -112,7 +124,7 @@ const TransactionsFilter = ({ filters, setFilters }: Props) => {
                         />
                     </div>
                 </div>
-                {(filters.category ||
+                {(filters.categoryId ||
                     filters.type ||
                     filters.startDate ||
                     filters.endDate) && (
@@ -122,7 +134,7 @@ const TransactionsFilter = ({ filters, setFilters }: Props) => {
                     )}
             </CardContent>
         </Card>
-    )
-}
+    );
+};
 
-export default TransactionsFilter
+export default TransactionsFilter;

@@ -11,19 +11,20 @@ export interface SessionPayload extends JWTPayload {
 export type Category = {
     id: string;
     name: string;
-    icon?: string | LucideIcon;
+    icon: string;
     color: string;
-    type: "income" | "expenses"; // enforce union;
+    type: "income" | "expense"; // enforce union;
     createdAt: string;
 };
 
 export type Transaction = {
     id: string;
     description: string;
-    category: string;
+    note?: string;
+    category: Category;
     categoryId: string;
     amount: number;
-    type: "income" | "expenses";
+    type: "income" | "expense";
     createdAt: string;
 };
 

@@ -89,14 +89,14 @@ export function getCategoryMeta(categoryName: string) {
 }
 
 export function generateExpenseCategories(transactions: Transaction[]): ExpenseCategory[] {
-  const expenses = transactions.filter((t) => t.type === "expenses")
+  const expenses = transactions.filter((t) => t.type === "expense")
 
   const totalExpenses = expenses.reduce((sum, t) => sum + t.amount, 0)
 
   const categoryMap: Record<string, number> = {}
 
   for (const tx of expenses) {
-    categoryMap[tx.category] = (categoryMap[tx.category] || 0) + tx.amount
+    categoryMap[tx.categoryId] = (categoryMap[tx.categoryId] || 0) + tx.amount
   }
 
   return Object.entries(categoryMap).map(([name, value]) => ({
@@ -144,7 +144,7 @@ export function fetchCategoriesWithStats(
   // Step 1: Build stats for each category
   const categoriesWithStats: CategoryWithStats[] = categories.map((category) => {
     const relevantTxns = transactions.filter(
-      (txn) => txn.category === category.name && txn.type === category.type
+      (txn) => txn.categoryId === category.id && txn.type === category.type
     );
 
     const transactionCount = relevantTxns.length;

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import CurrencySelector from "@/components/CurrencySelector";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, HandCoins } from "lucide-react";
 import { navigation } from "@/lib/contsants";
 
 export default function MobileHeader() {
@@ -17,7 +17,7 @@ export default function MobileHeader() {
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 brand-gradient rounded-lg flex items-center justify-center">
-                        <i className="fas fa-coins text-white text-sm"></i>
+                        <HandCoins className="text-white text-lg p-0.5" />
                     </div>
                     <h1 className="text-lg font-bold text-slate-900">Penny Trail</h1>
                 </div>

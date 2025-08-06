@@ -10,7 +10,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginInput, loginUserSchema } from "@/lib/schemas";
-import { toast } from "sonner";
+import { toast } from 'sonner';
 
 
 const LogInForm = () => {

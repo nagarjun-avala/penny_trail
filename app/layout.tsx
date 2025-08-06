@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { LoadingProvider } from "@/context/LoadingContext";
+import { GlobalLoader } from "@/components/ui/GlobalLoader";
+import { RouteChangeHandler } from "@/providers/RouteChangeHandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,8 +31,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Toaster />
+        <LoadingProvider>
+          <GlobalLoader />
+          <RouteChangeHandler />
+          {children}
+        </LoadingProvider>
+        <Toaster position="top-right" />
       </body>
     </html>
   );

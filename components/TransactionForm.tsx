@@ -25,48 +25,40 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { formatDateForInput } from "@/lib/utils";
+import { getLucideIcon } from "@/lib/utils";
 import React, { useState } from "react";
-import { Transaction } from "@/lib/types";
+import { Category, Transaction } from "@/lib/types";
 import { insertTransactionSchema } from "@/lib/schemas";
-import { defaultCategories } from "@/lib/contsants";
 import { toast } from "sonner";
 import z from "zod";
+import { createTrasaction } from "@/lib/fetch";
 
 
 interface TransactionFormProps {
     transaction?: Transaction;
+    categories: Category[]
     onSuccess?: () => void;
 }
 
 
-export default function TransactionForm({ transaction, onSuccess }: TransactionFormProps) {
+export default function TransactionForm({ transaction, categories, onSuccess }: TransactionFormProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [selectedType, setSelectedType] = useState("expense");
 
     const form = useForm({
         resolver: zodResolver(insertTransactionSchema),
         defaultValues: {
             description: transaction?.description || "",
+            note: transaction?.note || "",
             amount: transaction?.amount || 0, // number (because schema coerces)
-            type: transaction?.type || "expenses",
+            type: transaction?.type || "expense",
             categoryId: transaction?.categoryId || "",
-            createdAt: transaction
-                ? formatDateForInput(transaction.createdAt)
-                : formatDateForInput(new Date()),
         },
     });
-
-
-
-
-    const selectedType = form.watch("type");
-
-    const filteredCategories = defaultCategories.filter(cat => cat.type === selectedType);
-
     const onSubmit = async (data: z.infer<typeof insertTransactionSchema>) => {
         setIsSubmitting(true);
-        await new Promise((res) => setTimeout(res, 1000)); // Simulate network delay
-        console.log(data)
+        const res = await createTrasaction(data)
+        console.log(res)
         toast.success("Success", {
             description: transaction ? "Transaction updated" : "Transaction created",
         });
@@ -78,7 +70,7 @@ export default function TransactionForm({ transaction, onSuccess }: TransactionF
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form className="space-y-4">
                 <FormField
                     control={form.control}
                     name="type"
@@ -87,7 +79,10 @@ export default function TransactionForm({ transaction, onSuccess }: TransactionF
                             <FormLabel>Type</FormLabel>
                             <FormControl>
                                 <RadioGroup
-                                    onValueChange={field.onChange}
+                                    onValueChange={(e) => {
+                                        field.onChange(e)
+                                        setSelectedType(e)
+                                    }}
                                     defaultValue={field.value}
                                     className="flex space-x-4"
                                 >
@@ -96,8 +91,8 @@ export default function TransactionForm({ transaction, onSuccess }: TransactionF
                                         <Label htmlFor="income">Income</Label>
                                     </div>
                                     <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="expenses" id="expenses" />
-                                        <Label htmlFor="expenses">Expenses</Label>
+                                        <RadioGroupItem value="expense" id="expense" />
+                                        <Label htmlFor="expense">Expense</Label>
                                     </div>
                                 </RadioGroup>
                             </FormControl>
@@ -133,24 +128,24 @@ export default function TransactionForm({ transaction, onSuccess }: TransactionF
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    {filteredCategories.map((category) => (
-                                        <SelectItem key={category.id} value={category.id}>
+                                    {categories.filter(cat => cat.type === selectedType).map((category) => {
+                                        const Icon = getLucideIcon(category.icon);
+                                        return <SelectItem
+                                            key={category.id}
+                                            value={category.id}
+                                        >
                                             <div className="flex items-center space-x-2">
                                                 <div
                                                     className="w-9 h-9 flex items-center justify-center rounded-md text-lg"
                                                     style={{ backgroundColor: `${category.color}20`, color: category.color }}
                                                 >
-                                                    {typeof category.icon === "string" ? (
-                                                        category.icon
-                                                    ) : category.icon ? (
-                                                        React.createElement(category.icon)
-                                                    ) : null}
-
+                                                    <Icon />
                                                 </div>
                                                 <span>{category.name}</span>
                                             </div>
                                         </SelectItem>
-                                    ))}
+                                    })}
+
                                 </SelectContent>
                             </Select>
                             <FormMessage />
@@ -178,26 +173,16 @@ export default function TransactionForm({ transaction, onSuccess }: TransactionF
                         </FormItem>
                     )}
                 />
-
-                <FormField
-                    control={form.control}
-                    name="createdAt"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Date</FormLabel>
-                            <FormControl>
-                                <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
                 <div className="flex space-x-3 pt-4">
                     <Button type="button" variant="outline" className="flex-1" onClick={() => onSuccess?.()}>
                         Cancel
                     </Button>
-                    <Button type="submit" className="flex-1" disabled={isSubmitting}>
+                    <Button
+                        type="submit"
+                        className="flex-1"
+                        disabled={isSubmitting}
+                        onClick={form.handleSubmit(onSubmit)}
+                    >
                         {isSubmitting ? "Saving..." : transaction ? "Update Transaction" : "Add Transaction"}
                     </Button>
                 </div>
