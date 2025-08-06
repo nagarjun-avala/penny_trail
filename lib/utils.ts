@@ -4,6 +4,8 @@ import { format, isToday, isYesterday, differenceInDays, parseISO } from "date-f
 import { currencyService } from "./currency";
 import { defaultCategories } from "./contsants";
 import { Category, CategoryWithStats, ExpenseCategory, MonthlyData, Transaction, Trend } from "./types";
+import * as LucideIcons from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -58,7 +60,25 @@ export function getRelativeDate(dateStr: string): string {
   return format(date, "dd MMM yyyy") // Example: 31 Jul 2025
 }
 
+/**
+ * Maps a string name (like "ShoppingCart") to a LucideIcon component.
+ *
+ * @param iconName - The name of the icon to look up.
+ * @returns A LucideIcon component or fallback.
+ */
+export function getLucideIcon(iconName: string): LucideIcon {
+  const icons = LucideIcons as unknown as Record<string, LucideIcon>;
+  const icon = icons[iconName];
 
+  if (process.env.NODE_ENV === "development" && !icon) {
+    console.warn(`⚠️ Unknown Lucide icon: "${iconName}" — using fallback.`);
+    return LucideIcons.ShoppingCartIcon;
+  }
+
+  return icon;
+}
+
+// ! Custome functions may change the location or move the function to another file
 export function getCategoryMeta(categoryName: string) {
   const category = defaultCategories.find(c => c.name === categoryName)
   return {
@@ -111,7 +131,7 @@ export function generateMonthlyData(trends: Trend[]): MonthlyData[] {
   // Convert Map to array and sort chronologically
   const sorted = Array.from(monthlyMap.entries())
     .sort(([a], [b]) => (a > b ? 1 : -1))
-    .map(([_, value]) => value)
+    .map(([, value]) => value)
 
   // Return only the last 6 months
   return sorted.slice(-6)

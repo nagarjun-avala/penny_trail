@@ -30,15 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex min-h-screen bg-slate-50">
-          <Sidebar />
-          <main className="flex-1 overflow-x-hidden">
-            <MobileHeader />
-            <div className="p-4 lg:p-8">
-              {children}
-            </div>
-          </main>
-        </div>
+        {children}
         <Toaster />
       </body>
     </html>

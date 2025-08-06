@@ -8,23 +8,6 @@ export const navigation = [
     { name: "Categories", href: "/categories", icon: TagsIcon },
 ];
 
-export const TRANSACTION_TYPES = {
-    INCOME: "income",
-    EXPENSE: "expenses",
-} as const;
-
-export const COPY_CATEGORY_COLORS = [
-    "#F97316", // orange
-    "#3B82F6", // blue
-    "#8B5CF6", // purple
-    "#EF4444", // red
-    "#10B981", // emerald
-    "#EC4899", // pink
-    "#F59E0B", // amber
-    "#6B7280", // gray
-] as const;
-
-
 export const CHART_COLORS = {
     income: "#10B981",
     expenses: "#EF4444",
@@ -101,7 +84,7 @@ export const defaultCategories: Category[] = [
         id: "f3d98940-6711-4e03-a303-d54496ec6fe0",
         name: "Salary",
         icon: BriefcaseBusinessIcon,
-        color: "#10B981",
+        color: "#10B971",
         type: "income",
         createdAt: "2025-07-31T19:09:52.481163"
     },

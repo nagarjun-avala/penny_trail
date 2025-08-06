@@ -30,6 +30,8 @@ export default function CategoryForm({ category, onSuccess }: CategoryFormProps)
         },
     });
 
+    console.log({ values: form.formState.defaultValues })
+
 
     const onSubmit = (data: InsertCategory) => {
         console.log(data)
@@ -93,7 +95,7 @@ export default function CategoryForm({ category, onSuccess }: CategoryFormProps)
                                 </FormControl>
                                 <SelectContent className="py-2">
                                     {defaultCategories.map(cat => (
-                                        <SelectItem key={cat.id} value={cat.name}>
+                                        <SelectItem key={cat.id} value={cat.id}>
                                             <div className="flex items-center space-x-2">
                                                 {typeof cat.icon === "string" ? (
                                                     <span>{cat.icon}</span>

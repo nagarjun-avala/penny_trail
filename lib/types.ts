@@ -1,4 +1,11 @@
+import { JWTPayload } from "jose";
 import { LucideIcon } from "lucide-react";
+
+// Authentication Types
+export interface SessionPayload extends JWTPayload {
+    id: string;
+    email: string;
+};
 
 // Base types
 export type Category = {
@@ -17,22 +24,6 @@ export type Transaction = {
     categoryId: string;
     amount: number;
     type: "income" | "expenses";
-    createdAt: string;
-};
-
-
-
-
-export type Goal = {
-    id: string;
-    name: string;
-    description?: string;
-    targetAmount: string;
-    currentAmount: string;
-    targetDate?: string;
-    category: "savings" | "debt" | "purchase";
-    priority: "low" | "medium" | "high";
-    isCompleted: boolean;
     createdAt: string;
 };
 
@@ -99,13 +90,6 @@ export type CategoryWithStats = Category & {
 
 export type RecurringTransactionWithCategory = RecurringTransaction & {
     category: Category;
-};
-
-export type GoalWithProgress = Goal & {
-    progressPercentage: number;
-    remainingAmount: string;
-    daysRemaining?: number;
-    monthlyTarget?: string;
 };
 
 

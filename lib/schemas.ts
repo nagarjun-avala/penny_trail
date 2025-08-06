@@ -25,44 +25,26 @@ export const insertTransactionSchema = z.object({
     notes: z.string().optional(),
 });
 
-// 🔷 Budget Schema
-export const insertBudgetSchema = z.object({
-    categoryId: z.string().min(1, "Category is required"),
-    amount: amountField,
-    period: z.enum(["weekly", "monthly", "yearly"]).default("monthly"),
-    type: z.enum(["income", "expenses"]),
-    startDate: z.string().min(1, "Start date is required"),
-    endDate: z.string().optional(),
-    isActive: z.boolean().optional(),
+// 🔷 User Login Schema
+export const loginUserSchema = z.object({
+    email: z.email("Enter a valid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+});
+// 🔷 User Register Schema
+export const registerUserSchema = z.object({
+    name: z.string().min(2, "Name is required"),
+    email: z.email("Enter a valid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
 });
 
-// 🔷 Goal Schema
-export const insertGoalSchema = z.object({
-    name: z.string().min(1, "Goal name is required"),
-    description: z.string().optional(),
-    targetAmount: amountField,
-    targetDate: z.string().optional(),
-    category: z.enum(["savings", "debt", "purchase"]).default("savings"),
-    priority: z.enum(["low", "medium", "high"]).default("medium"),
-});
-
-// 🔷 Recurring Transaction Schema
-export const insertRecurringTransactionSchema = z.object({
-    description: z.string().min(1),
-    categoryId: z.string().min(1, "Category is required"),
-    type: z.enum(["income", "expenses"]),
-    amount: amountField,
-    frequency: z.enum(["daily", "weekly", "monthly", "yearly"]),
-    startDate: z.string().min(1, "Start date is required"),
-    endDate: z.string().optional(),
-    notes: z.string().optional(),
-
-});
 
 
 // Base types
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
-export type InsertBudget = z.infer<typeof insertBudgetSchema>;
-export type InsertGoal = z.infer<typeof insertGoalSchema>;
-export type InsertRecurringTransaction = z.infer<typeof insertRecurringTransactionSchema>;
+export type LoginInput = z.infer<typeof loginUserSchema>;
+export type RegisterInput = z.infer<typeof registerUserSchema>;
