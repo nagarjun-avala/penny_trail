@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server"
 import { compare } from "bcryptjs";
-import jwt from "jsonwebtoken"
 import { db } from "@/lib/db"
 import { encrypt } from "@/lib/session"
-
-const JWT_SECRET = process.env.JWT_SECRET!
-
 
 export async function POST(req: Request) {
     const { email, password } = await req.json();

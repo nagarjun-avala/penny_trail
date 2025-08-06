@@ -10,7 +10,6 @@ import { RegisterInput, registerUserSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function RegisterPage() {
-    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +46,7 @@ export default function RegisterPage() {
                                     className="pl-10"
                                 />
                             </div>
+                            {errors.name && <p className="text-sm text-destructive mt-1">{errors?.name?.message}</p>}
                         </div>
                         <div>
                             <label className="block mb-1 text-sm font-medium text-gray-700">Password</label>
@@ -65,6 +65,7 @@ export default function RegisterPage() {
                                     {showPassword ? "Hide" : "Show"}
                                 </Button>
                             </div>
+                            {errors.password && <p className="text-sm text-destructive mt-1">{errors?.password?.message}</p>}
                         </div>
                         <Button
                             type="submit"
