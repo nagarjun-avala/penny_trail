@@ -19,14 +19,36 @@ export const getTrasactions = async () => {
     }
 }
 
-export const createTrasaction = async (transaction: Partial<Transaction>): Promise<Transaction> => {
+
+/**
+ * Creates or updates a transaction based on the presence of an `id`.
+ *
+ * - If `id` exists ➜ updates the existing transaction (PATCH).
+ * - If no `id` ➜ creates a new transaction (POST).
+ *
+ * @param transaction The transaction data to create or update.
+ * @returns The created or updated transaction object.
+ */
+export const createOrUpdateTransaction = async (
+    transaction: Partial<Transaction>
+): Promise<Transaction> => {
+    console.log(transaction)
     try {
-        const res = await postData("/api/transaction", transaction);
-        return res as Transaction
+        if (transaction.id && transaction.id !== "") {
+            // ✏️ Update existing transaction
+            const res = await patchData(`/api/transaction/${transaction.id}`, transaction);
+            return res as Transaction;
+        } else {
+            // ➕ Create new transaction
+            const res = await postData("/api/transaction", transaction);
+            return res as Transaction;
+        }
     } catch {
-        throw new Error("Falied to create trasaction")
+        throw new Error(
+            transaction.id ? "Failed to update transaction" : "Failed to create transaction"
+        );
     }
-}
+};
 
 /**
  * Creates or updates a category based on the presence of an `id`.
@@ -58,6 +80,24 @@ export const createOrUpdateCategory = async (
     }
 };
 
+/**
+ * Deletes a transaction by ID.
+ *
+ * @param id - The ID of the transaction to delete
+ * @returns A success boolean or throws on failure
+ * @throws If deletion fails or transaction has associated transactions
+ */
+export const deleteTransaction = async (id: string): Promise<boolean> => {
+    try {
+        await deleteData(`/api/transaction/${id}`);
+        return true;
+    } catch {
+        // console.error("❌ Failed to delete transaction:", error);
+        throw new Error(
+            "Unable to delete transaction. It might be in use."
+        );
+    }
+};
 /**
  * Deletes a category by ID.
  *

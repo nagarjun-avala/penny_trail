@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import z from "zod";
 
 import { insertTransactionSchema } from "@/lib/schemas";
-import { createTrasaction } from "@/lib/controllers";
 import { getLucideIcon } from "@/lib/utils";
 import { Category, Transaction } from "@/lib/types";
 
@@ -25,6 +24,7 @@ import {
     Select, SelectContent, SelectItem,
     SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import { createOrUpdateTransaction } from "@/lib/controllers";
 
 interface TransactionFormProps {
     transaction?: Transaction;
@@ -46,6 +46,7 @@ export default function TransactionForm({
     const form = useForm({
         resolver: zodResolver(insertTransactionSchema),
         defaultValues: {
+            id: transaction?.id || "",
             description: transaction?.description || "",
             note: transaction?.note || "",
             amount: transaction?.amount || 0, // number (because schema coerces)
@@ -57,18 +58,17 @@ export default function TransactionForm({
     const onSubmit = async (data: z.infer<typeof insertTransactionSchema>) => {
         setIsSubmitting(true);
         try {
-            const savedTx = await createTrasaction(data);
-            toast.success("Transaction saved!");
+            const saved = await createOrUpdateTransaction({ ...data, }); // handle both create and update
+            toast.success(transaction ? "Trantransaction updated!" : "Trantransaction created!");
             form.reset();
-            onSave?.(savedTx); // 🔥 Pass saved transaction to parent
-            onSuccess?.();
-        } catch {
+            onSave?.(saved); // pass the new/updated transaction back
+        } catch (error) {
+            console.log(error)
             toast.error("Something went wrong");
         } finally {
             setIsSubmitting(false);
         }
     };
-
 
     return (
         <Form {...form}>
@@ -134,7 +134,7 @@ export default function TransactionForm({
                                                             >
                                                                 <Icon />
                                                             </div>
-                                                            <span>{cat.name}</span>
+                                                            <span>{cat?.name}</span>
                                                         </div>
                                                     </SelectItem>
                                                 );

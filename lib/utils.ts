@@ -101,11 +101,11 @@ export function generateExpenseCategories(transactions: Transaction[]): ExpenseC
   }))
 }
 
-export function generateMonthlyData(trends: Trend[]): MonthlyData[] {
+export function generateMonthlyData(trends: Partial<Trend>[]): MonthlyData[] {
   const monthlyMap = new Map<string, MonthlyData>()
 
   for (const item of trends) {
-    const date = new Date(item.date)
+    const date = new Date(item.date ?? Date.now()); // ✅ Safe fallback
     const key = `${date.getFullYear()}-${date.getMonth()}` // e.g., "2025-6"
 
     if (!monthlyMap.has(key)) {
@@ -117,8 +117,8 @@ export function generateMonthlyData(trends: Trend[]): MonthlyData[] {
     }
 
     const current = monthlyMap.get(key)!
-    current.income += item.income
-    current.expenses += item.expenses
+    current.income += item.income ?? 0
+    current.expenses += item.expenses ?? 0
   }
 
   // Convert Map to array and sort chronologically

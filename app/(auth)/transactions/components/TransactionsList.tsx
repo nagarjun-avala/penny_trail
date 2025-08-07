@@ -30,12 +30,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 type Props = {
     transactions: Transaction[]
     loading: boolean
+    handleDelete: (is: string) => void
     setSelectedTransaction: Dispatch<SetStateAction<Transaction | undefined>>
     setIsDialogOpen: Dispatch<SetStateAction<boolean>>
 }
 
 
-const TransactionsList = ({ transactions, loading, setSelectedTransaction, setIsDialogOpen }: Props) => {
+const TransactionsList = ({ transactions, loading, handleDelete, setSelectedTransaction, setIsDialogOpen }: Props) => {
 
     const handleEdit = (transaction: Transaction) => {
         setSelectedTransaction(transaction);
@@ -46,6 +47,7 @@ const TransactionsList = ({ transactions, loading, setSelectedTransaction, setIs
         setSelectedTransaction(undefined);
         setIsDialogOpen(true);
     };
+
     return (
         <Card className='min-h-72'>
             <CardContent>
@@ -91,7 +93,7 @@ const TransactionsList = ({ transactions, loading, setSelectedTransaction, setIs
                                             {transaction.description}
                                         </TableCell>
                                         <TableCell >
-                                            <Badge variant="secondary">{transaction.category.name}</Badge>
+                                            <Badge variant="secondary">{transaction?.category?.name ?? "Uncategorised"}</Badge>
                                         </TableCell>
                                         <TableCell >
                                             {transaction.type}
@@ -132,7 +134,9 @@ const TransactionsList = ({ transactions, loading, setSelectedTransaction, setIs
                                                         </AlertDialogHeader>
                                                         <AlertDialogFooter>
                                                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                            <AlertDialogAction onClick={() => { }}>
+                                                            <AlertDialogAction
+                                                                onClick={() => handleDelete(transaction.id)}
+                                                            >
                                                                 Delete
                                                             </AlertDialogAction>
                                                         </AlertDialogFooter>

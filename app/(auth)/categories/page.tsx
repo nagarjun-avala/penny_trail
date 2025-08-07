@@ -21,10 +21,10 @@ import { deleteCategory, getCategories, getTrasactions } from "@/lib/controllers
 import { toast } from "sonner";
 
 const CategoriesPage = () => {
+    const [loading, setLoading] = useState(true);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [allCategories, setAllCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [filteredCategories, setFilteredCategories] = useState<CategoryWithStats[]>([]);
-
     const [selectedCategory, setSelectedCategory] = useState<CategoryWithStats | undefined>();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [filterRange, setFilterRange] = useState<DateFilterValue>("this_month");
@@ -33,18 +33,26 @@ const CategoriesPage = () => {
     const now = useMemo(() => new Date(), []);
 
     /** 🧠 Fetch transactions & categories once */
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [txns, cats] = await Promise.all([getTrasactions(), getCategories()]);
-                setTransactions(txns);
-                setAllCategories(cats);
-            } catch (err) {
-                console.error("Failed to fetch data:", err);
-            }
-        };
-        fetchData();
+    const fetchData = useCallback(async () => {
+        setLoading(true); // ✅ Always reset to true before fetch
+        try {
+            const [categories, trasactions] = await Promise.all([
+                getCategories(),
+                getTrasactions(),
+            ]);
+            setTransactions(trasactions);
+            setCategories(categories);
+        } catch (error) {
+            console.error("❌ Failed to fetch data:", error);
+        } finally {
+            setLoading(false);
+        }
     }, []);
+
+    // 🔄 Fetch data on mount
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     /** 📆 Filter logic */
     const filteredTransactions = useMemo(() => {
@@ -86,9 +94,9 @@ const CategoriesPage = () => {
 
     /** 🚀 Update filtered categories when transactions or categories change */
     useEffect(() => {
-        const updated = fetchCategoriesWithStats(filteredTransactions, allCategories);
+        const updated = fetchCategoriesWithStats(filteredTransactions, categories);
         setFilteredCategories(updated);
-    }, [filteredTransactions, allCategories]);
+    }, [filteredTransactions, categories]);
 
     /** 🧠 Filter options based on existing txn dates */
     const availableFilters = useMemo(() => {
@@ -147,6 +155,7 @@ const CategoriesPage = () => {
         try {
             const res = await deleteCategory(id)
             if (res) toast.success("Category deleted sucessfully")
+            fetchData()
         } catch (error) {
             toast.error(String(error))
         }
@@ -154,7 +163,7 @@ const CategoriesPage = () => {
 
     /** 📦 Handle new category addition optimistically or update exsisting one */
     const handleUpsertCategory = useCallback((updated: Category) => {
-        setAllCategories(prev => {
+        setCategories(prev => {
             const exists = prev.find(cat => cat.id === updated.id);
             if (exists) {
                 // 🔁 Replace existing category
@@ -219,6 +228,7 @@ const CategoriesPage = () => {
 
             {/* Grid */}
             <CategoryList
+                loading={loading}
                 categories={sortedCategories}
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}

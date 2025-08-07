@@ -17,12 +17,12 @@ export const insertCategorySchema = z.object({
 
 // 🔷 Transaction Schema
 export const insertTransactionSchema = z.object({
+    id: z.string().optional(),
     description: z.string().optional(),
-    note: z.string().optional(),
     amount: amountField,
     type: z.enum(["income", "expense"]),
     categoryId: z.string().min(1, "Category is required"),
-    notes: z.string().optional(),
+    note: z.string().optional(),
 });
 
 // 🔷 User Login Schema

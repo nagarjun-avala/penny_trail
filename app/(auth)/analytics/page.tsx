@@ -6,7 +6,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-
 import { useEffect, useMemo, useState } from "react";
 import { defaultCategories } from "@/lib/contsants";
 import {
@@ -63,18 +62,18 @@ export default function Analytics() {
     const expenseCategories = generateExpenseCategories(transactions)
 
     // 🔄 Fetch data on mount
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const trasactions = await getTrasactions()
+            setTransactions(trasactions);
+        } catch (error) {
+            console.error("❌ Failed to fetch data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const trasactions = await getTrasactions()
-                setTransactions(trasactions);
-            } catch (error) {
-                console.error("❌ Failed to fetch data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
     }, []);
 

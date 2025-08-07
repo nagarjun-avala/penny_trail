@@ -15,7 +15,8 @@ import { Category, Transaction } from "@/lib/types";
 import TransactionsList from "./components/TransactionsList";
 import TransactionsFilter from "./components/TransactionsFilter";
 import { Plus } from "lucide-react";
-import { getCategories, getTrasactions } from "@/lib/controllers";
+import { deleteTransaction, getCategories, getTrasactions } from "@/lib/controllers";
+import { toast } from "sonner";
 
 export default function TransactionsPage() {
     const [loading, setLoading] = useState(true);
@@ -46,8 +47,6 @@ export default function TransactionsPage() {
         }
     }, []);
 
-
-
     // 🔄 Fetch data on mount
     useEffect(() => {
         fetchData();
@@ -65,19 +64,29 @@ export default function TransactionsPage() {
         });
     }, []);
 
-
-
     // ➕ Add button handler
     const handleAdd = useCallback(() => {
         setSelectedTransaction(undefined);
         setIsDialogOpen(true);
     }, []);
 
+    /** ❌ Delete transaction stub */
+    const handleDelete = async (id: string) => {
+        try {
+            const res = await deleteTransaction(id)
+            if (res) toast.success("Transaction deleted sucessfully")
+            fetchData()
+        } catch (error) {
+            toast.error(String(error))
+        }
+    };
+
     const handleDialogClose = useCallback(() => {
         setSelectedTransaction(undefined);
         setIsDialogOpen(false);
         fetchData(); // 🚀 Refresh the data
     }, [fetchData]);
+
 
     // 🧠 Memoized filtered transactions
     const filteredTransactions = useMemo(() => {
@@ -143,6 +152,7 @@ export default function TransactionsPage() {
             <TransactionsList
                 loading={loading}
                 transactions={filteredTransactions}
+                handleDelete={handleDelete}
                 setIsDialogOpen={setIsDialogOpen}
                 setSelectedTransaction={setSelectedTransaction}
             />
