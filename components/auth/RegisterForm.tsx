@@ -30,10 +30,10 @@ const RegisterForm = () => {
     } = useForm<RegisterInput>({
         resolver: zodResolver(registerUserSchema),
         defaultValues: {
-            name: "Nagarjun A",
-            email: "dummy@mail.com",
-            password: "Nagarjun@12345",
-            confirmPassword: "Nagarjun@12345",
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
 
         }
     });
