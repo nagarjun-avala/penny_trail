@@ -5,12 +5,13 @@ import { insertCategorySchema } from "@/lib/schemas";
 import { db } from "@/lib/db";
 import { getServerSession } from "@/lib/getServerSession";
 
-export async function PATCH(
-    request: Request,
-    context: { params: { id: string } }
-) {
+export async function PATCH(request: Request) {
     try {
-        const { id } = context.params;
+        const url = new URL(request.url);
+        const id = url.pathname.split("/").pop();
+        if (!id) {
+            return NextResponse.json({ error: "Missing category ID" }, { status: 400 });
+        }
 
         // ⛏️ parse the incoming JSON
         const body = await request.json();
@@ -43,7 +44,7 @@ export async function DELETE(req: Request) {
         if (!id) {
             return NextResponse.json({ error: "Missing category ID" }, { status: 400 });
         }
-        console.log(id)
+
         const session = await getServerSession()
         if (!session) {
             return new Response("Unauthorized", { status: 401 });

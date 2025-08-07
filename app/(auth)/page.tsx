@@ -5,13 +5,14 @@ import { Overview } from "@/components/overview"
 import { RecentTransactions } from "@/components/recent-transactions"
 import { EmptyPlaceholder } from "@/components/empty-placeholder"
 import { formatCurrency } from "@/lib/utils"
-import { dummyTransactions } from "@/data/dummyTransactions"
 import { calculateTrendChanges, generateTrends } from "@/lib/generateTrends"
 import { defaultCategories } from "@/lib/contsants"
 import { ArrowDown, ArrowUp, Wallet } from "lucide-react"
 import { Transaction, TrendData } from "@/lib/types"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { getTrasactions } from "@/lib/fetch"
+import { toast } from "sonner"
 
 
 export default function DashboardPage() {
@@ -53,30 +54,41 @@ export default function DashboardPage() {
   )
 
   useEffect(() => {
-    const filtered = getFilteredTransactions(dummyTransactions)
-    setTransactions(filtered)
+    const fetchData = async () => {
+      try {
+        const res = await getTrasactions();
+        const filtered = getFilteredTransactions(res);
+        setTransactions(filtered);
 
-    // ✅ Dynamically compute summary from filtered transactions
-    const income = filtered
-      .filter((t) => t.type === "income")
-      .reduce((sum, t) => sum + t.amount, 0)
+        // ✅ Dynamically compute summary from filtered transactions
+        const income = filtered
+          .filter((t) => t.type === "income")
+          .reduce((sum, t) => sum + t.amount, 0);
 
-    const expenses = filtered
-      .filter((t) => t.type === "expense")
-      .reduce((sum, t) => sum + t.amount, 0)
+        const expenses = filtered
+          .filter((t) => t.type === "expense")
+          .reduce((sum, t) => sum + t.amount, 0);
 
-    const netIncome = income - expenses
-    const savingsRate = income > 0 ? Math.round((netIncome / income) * 100) : 0
-    const expensesRate = expenses > 0 ? Math.round((netIncome / expenses) * 100) : 0
+        const netIncome = income - expenses;
+        const savingsRate = income > 0 ? Math.round((netIncome / income) * 100) : 0;
+        const expensesRate = expenses > 0 ? Math.round((netIncome / expenses) * 100) : 0;
 
-    setSummary({
-      income,
-      expenses,
-      netIncome,
-      savingsRate,
-      expensesRate,
-    })
-  }, [getFilteredTransactions])
+        setSummary({
+          income,
+          expenses,
+          netIncome,
+          savingsRate,
+          expensesRate,
+        });
+      } catch {
+        toast.error("Failed to fetch transactions")
+        // console.error("Failed to fetch transactions:", error);
+      }
+    };
+
+    fetchData();
+  }, [getFilteredTransactions]);
+
 
   useEffect(() => {
     const trendData = generateTrends(transactions, defaultCategories)
