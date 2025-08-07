@@ -1,7 +1,7 @@
 // app/api/transaction/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "@/lib/getServerSession";
+import { getServerSession } from "@/lib/getSession";
 import { db } from "@/lib/db";
 
 export async function GET() {

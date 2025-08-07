@@ -14,7 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { TrendData } from "@/lib/types"
+import { Trend } from "@/lib/types"
 
 const chartConfig = {
   spending: {
@@ -30,7 +30,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function Overview({ data, days }: { data: TrendData[], days: string }) {
+export function Overview({ data, days }: { data: Trend[], days: string }) {
 
   return (
     <Card className="@container/card">

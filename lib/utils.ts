@@ -41,12 +41,6 @@ export function formatDate(date: Date | string): string {
   }).format(d);
 }
 
-export function formatDateForInput(date: Date | string): string {
-  const d = typeof date === "string" ? new Date(date) : date;
-  return d.toISOString().split('T')[0];
-}
-
-
 export function getRelativeDate(dateStr: string): string {
   const date = typeof dateStr === "string" ? parseISO(dateStr) : dateStr
 
@@ -78,7 +72,6 @@ export function getLucideIcon(iconName: string): LucideIcon {
   return icon;
 }
 
-// ! Custome functions may change the location or move the function to another file
 export function getCategoryMeta(categoryName: string) {
   const category = defaultCategories.find(c => c.name === categoryName)
   return {
@@ -174,3 +167,22 @@ export function fetchCategoriesWithStats(
         : 0,
   }));
 }
+
+/**
+ * Returns the initials from a full name.
+ *
+ * @param name - Full name as a string (e.g., "Arun Kumar")
+ * @returns Initials in uppercase (e.g., "AK")
+ */
+export const getInitials = (name: string): string => {
+  return name
+    // Split the name by spaces to get each word
+    .split(' ')
+    // Filter out any empty strings (in case of extra spaces)
+    .filter(Boolean)
+    // Take the first character of each word and convert to uppercase
+    .map((word) => word[0].toUpperCase())
+    // Combine all initials into a single string
+    .join('');
+};
+

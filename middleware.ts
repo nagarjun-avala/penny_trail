@@ -6,8 +6,6 @@ import { decrypt } from "./lib/session";
 const PUBLIC_PATHS = [
     "/login",
     "/register",
-    "/forgot-password",
-    "/reset-password",
     "/_next",
     "/api",
     "/favicon.ico",
@@ -53,5 +51,5 @@ export async function middleware(req: NextRequest) {
 
 // Only match pages, exclude static assets and API
 export const config = {
-    matcher: ["/((?!login|register|forgot-password|reset-password|api|_next|favicon.ico).*)"],
+    matcher: ["/((?!login|register|api|_next|favicon.ico).*)"],
 };

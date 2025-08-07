@@ -8,10 +8,10 @@ import { formatCurrency } from "@/lib/utils"
 import { calculateTrendChanges, generateTrends } from "@/lib/generateTrends"
 import { defaultCategories } from "@/lib/contsants"
 import { ArrowDown, ArrowUp, Wallet } from "lucide-react"
-import { Transaction, TrendData } from "@/lib/types"
+import { Transaction, Trend } from "@/lib/types"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { getTrasactions } from "@/lib/fetch"
+import { getTrasactions } from "@/lib/controllers"
 import { toast } from "sonner"
 
 
@@ -25,7 +25,7 @@ export default function DashboardPage() {
     savingsRate: 0,
     expensesRate: 0,
   })
-  const [trends, setTrends] = useState<TrendData[]>([])
+  const [trends, setTrends] = useState<Trend[]>([])
   const [changes, setChanges] = useState({
     incomeChange: 0,
     expenseChange: 0,

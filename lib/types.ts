@@ -26,48 +26,18 @@ export type Transaction = {
     createdAt: string;
 };
 
-export type RecurringTransaction = {
-    id: string;
-    description: string;
-    amount: string;
-    type: "income" | "expenses";
-    categoryId: string;
-    frequency: "daily" | "weekly" | "monthly" | "yearly";
-    startDate: string;
-    endDate?: string;
-    lastProcessed?: string;
-    isActive: boolean;
-    createdAt: string;
-};
-
-export type trasanctionSummayType = {
-    income: number
-    expenses: number
-    netIncome: number
-    savingsRate: number
-    expenseRate: number
-}
-
 export type ExpenseCategory = {
     name: string
     value: number
     percentage: number
     color: string
 }
-
-// ! remove TrendData type (Trend and TrendData are almost same:- net: number [Add it to Trend])
 export type Trend = {
     date: string
     income: number
     expenses: number
-}
-
-export type TrendData = {
-    date: string;
-    income: number;
-    expenses: number;
     net: number;
-};
+}
 
 export type MonthlyData = {
     month: string
@@ -85,10 +55,6 @@ export type CategoryWithStats = Category & {
     totalAmount: string;
     avgAmount: string;
     percentage: number;
-};
-
-export type RecurringTransactionWithCategory = RecurringTransaction & {
-    category: Category;
 };
 
 

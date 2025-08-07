@@ -10,13 +10,12 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-
 import TransactionForm from "@/components/TransactionForm";
 import { Category, Transaction } from "@/lib/types";
 import TransactionsList from "./components/TransactionsList";
 import TransactionsFilter from "./components/TransactionsFilter";
 import { Plus } from "lucide-react";
-import { getCategories, getTrasactions } from "@/lib/fetch";
+import { getCategories, getTrasactions } from "@/lib/controllers";
 
 export default function TransactionsPage() {
     const [loading, setLoading] = useState(true);

@@ -7,8 +7,16 @@ import CurrencySelector from "@/components/CurrencySelector";
 import Link from "next/link";
 import { Menu, HandCoins } from "lucide-react";
 import { navigation } from "@/lib/contsants";
+import { NavUser } from "../nav-user";
 
-export default function MobileHeader() {
+type PageProps = {
+    user: {
+        name: string
+        email: string
+    }
+}
+
+export default function MobileHeader({ user }: PageProps) {
     const pathname = usePathname()
     const [open, setOpen] = useState(false);
 
@@ -61,6 +69,10 @@ export default function MobileHeader() {
                                     );
                                 })}
                             </nav>
+
+                            <div className="p-6 border-t border-slate-200">
+                                <NavUser user={user} />
+                            </div>
                         </SheetContent>
                     </Sheet>
                 </div>

@@ -29,7 +29,7 @@ import { Category } from "@/lib/types";
 import { InsertCategory, insertCategorySchema } from "@/lib/schemas";
 import { CATEGORY_COLORS, defaultCategories } from "@/lib/contsants";
 import { getLucideIcon } from "@/lib/utils";
-import { createOrUpdateCategory } from "@/lib/fetch";
+import { createOrUpdateCategory } from "@/lib/controllers";
 import { toast } from "sonner";
 
 interface CategoryFormProps {

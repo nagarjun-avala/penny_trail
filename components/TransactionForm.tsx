@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import z from "zod";
 
 import { insertTransactionSchema } from "@/lib/schemas";
-import { createTrasaction } from "@/lib/fetch";
+import { createTrasaction } from "@/lib/controllers";
 import { getLucideIcon } from "@/lib/utils";
 import { Category, Transaction } from "@/lib/types";
 

@@ -7,14 +7,15 @@ import { navigation } from "@/lib/contsants";
 import { createElement } from "react";
 import { HandCoins } from "lucide-react";
 import { NavUser } from "../nav-user";
-
-export default function Sidebar() {
-    const pathname = usePathname()
-
-    const user = {
-        name: "Nagarjun",
-        email: "csddv@hdf.com"
+type PageProps = {
+    user: {
+        name: string
+        email: string
     }
+}
+
+export default function Sidebar({ user }: PageProps) {
+    const pathname = usePathname()
 
     return (
         <aside className="w-64 bg-white shadow-lg border-r border-slate-200 hidden lg:block lg:sticky lg:top-0 lg:h-screen">
@@ -54,7 +55,7 @@ export default function Sidebar() {
                     <CurrencySelector />
                 </div>
             </div>
-            <div className="p-6 border-b border-slate-200">
+            <div className="p-6 border-t border-slate-200">
                 <NavUser user={user} />
             </div>
         </aside>

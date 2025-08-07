@@ -17,7 +17,7 @@ import CategoryList from "./CategoryList";
 import { CategoryWithStats, DateFilterValue, Transaction, Category } from "@/lib/types";
 import { DATE_FILTER_OPTIONS } from "@/lib/contsants";
 import { fetchCategoriesWithStats } from "@/lib/utils";
-import { deleteCategory, getCategories, getTrasactions } from "@/lib/fetch";
+import { deleteCategory, getCategories, getTrasactions } from "@/lib/controllers";
 import { toast } from "sonner";
 
 const CategoriesPage = () => {

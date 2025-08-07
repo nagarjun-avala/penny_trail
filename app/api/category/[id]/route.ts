@@ -3,7 +3,7 @@
 import { NextResponse } from "next/server";
 import { insertCategorySchema } from "@/lib/schemas";
 import { db } from "@/lib/db";
-import { getServerSession } from "@/lib/getServerSession";
+import { getServerSession } from "@/lib/getSession";
 
 export async function PATCH(request: Request) {
     try {

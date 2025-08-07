@@ -7,14 +7,6 @@ export const navigation = [
     { name: "Analytics", href: "/analytics", icon: ChartNoAxesCombinedIcon },
     { name: "Categories", href: "/categories", icon: TagsIcon },
 ];
-
-export const CHART_COLORS = {
-    income: "#10B981",
-    expense: "#EF4444",
-    primary: "#0ea5e9",
-    secondary: "#64748b",
-};
-
 export const defaultCategories: Category[] = [
     {
         id: "b7e9c32c-9119-47d2-a3b1-95fcd6ff1e20",

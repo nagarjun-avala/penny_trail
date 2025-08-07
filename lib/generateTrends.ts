@@ -1,21 +1,21 @@
-import { Category, Transaction, TrendData } from "./types";
+import { Category, Transaction, Trend } from "./types";
 
 
 export function generateTrends(
     transactions: Transaction[],
     categories: Category[]
-): TrendData[] {
-    const dateMap: Record<string, TrendData> = {};
+): Trend[] {
+    const dateMap: Record<string, Trend> = {};
 
     // Build category lookup
-    const categoryTypeMap: Record<string, "income" | "expenses"> = {};
+    const categoryTypeMap: Record<string, "income" | "expense"> = {};
     for (const cat of categories) {
         categoryTypeMap[cat.name] = cat.type;
     }
 
     for (const tx of transactions) {
         const date = tx.createdAt;
-        const type = categoryTypeMap[tx.category] ?? "expense"; // fallback to expense
+        const type = categoryTypeMap[tx.category.type] ?? "expense"; // fallback to expense
 
         if (!dateMap[date]) {
             dateMap[date] = { date, income: 0, expenses: 0, net: 0 };
@@ -35,14 +35,14 @@ export function generateTrends(
 }
 
 
-export function calculateTrendChanges(data: TrendData[]) {
+export function calculateTrendChanges(data: Trend[]) {
     if (data.length < 2) return { incomeChange: 0, expenseChange: 0, netChange: 0 }
 
     const half = Math.floor(data.length / 2)
     const previous = data.slice(0, half)
     const recent = data.slice(half)
 
-    const sum = (arr: TrendData[], key: "income" | "expenses") =>
+    const sum = (arr: Trend[], key: "income" | "expenses") =>
         arr.reduce((acc, item) => acc + item[key], 0)
 
     const prevIncome = sum(previous, "income")

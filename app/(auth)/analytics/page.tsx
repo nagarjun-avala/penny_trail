@@ -28,7 +28,7 @@ import { formatCurrency, generateExpenseCategories, generateMonthlyData } from "
 import { ChartPie } from "lucide-react";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Transaction } from "@/lib/types";
-import { getTrasactions } from "@/lib/fetch";
+import { getTrasactions } from "@/lib/controllers";
 
 
 const COLORS = [
