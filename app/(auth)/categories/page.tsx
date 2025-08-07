@@ -3,7 +3,6 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Plus } from "lucide-react";
 import { DateRange } from "react-day-picker";
-
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -12,11 +11,9 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-
 import CategoryForm from "@/components/CategoryForm";
 import CategoryFilter from "./CategoryFilter";
 import CategoryList from "./CategoryList";
-
 import { CategoryWithStats, DateFilterValue, Transaction, Category } from "@/lib/types";
 import { DATE_FILTER_OPTIONS } from "@/lib/contsants";
 import { fetchCategoriesWithStats } from "@/lib/utils";

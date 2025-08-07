@@ -3,7 +3,6 @@
 import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,7 +25,6 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-
 import { Category } from "@/lib/types";
 import { InsertCategory, insertCategorySchema } from "@/lib/schemas";
 import { CATEGORY_COLORS, defaultCategories } from "@/lib/contsants";

@@ -36,13 +36,14 @@ export async function PATCH(
     }
 }
 
-export async function DELETE(
-    _request: Request,
-    context: { params: { id: string } }
-) {
+export async function DELETE(req: Request) {
     try {
-        const { id } = context.params;
-
+        const url = new URL(req.url);
+        const id = url.pathname.split("/").pop();
+        if (!id) {
+            return NextResponse.json({ error: "Missing category ID" }, { status: 400 });
+        }
+        console.log(id)
         const session = await getServerSession()
         if (!session) {
             return new Response("Unauthorized", { status: 401 });
@@ -59,11 +60,6 @@ export async function DELETE(
             });
         }
 
-        // ✅ Safe to delete
-        await db.category.delete({
-            where: { id },
-        });
-
         // 👀 Step 1: Confirm it exists
         const existing = await db.category.findUnique({
             where: { id },
@@ -72,7 +68,6 @@ export async function DELETE(
         if (!existing) {
             return new Response("Category not found", { status: 404 });
         }
-
         // ✅ Step 2: Delete it safely
         await db.category.delete({
             where: { id },
