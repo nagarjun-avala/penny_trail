@@ -31,7 +31,7 @@ const CategoryList = ({ categories, loading, handleEdit, handleDelete, handleAdd
             )}
 
             {/* NO categories Add new category */}
-            {categories.length === 0 && (
+            {!loading && categories.length === 0 && (
                 <div className="col-span-full">
                     <Card>
                         <CardContent className="p-12 text-center">
