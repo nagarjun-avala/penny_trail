@@ -19,7 +19,6 @@ export const getTrasactions = async () => {
     }
 }
 
-
 /**
  * Creates or updates a transaction based on the presence of an `id`.
  *
@@ -32,7 +31,6 @@ export const getTrasactions = async () => {
 export const createOrUpdateTransaction = async (
     transaction: Partial<Transaction>
 ): Promise<Transaction> => {
-    console.log(transaction)
     try {
         if (transaction.id && transaction.id !== "") {
             // ✏️ Update existing transaction

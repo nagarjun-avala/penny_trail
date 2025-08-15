@@ -20,20 +20,20 @@ export async function middleware(req: NextRequest) {
 
     const token = req.cookies.get("token")?.value;
 
-    if (!token) {
+    const redirectToLogin = () => {
         const loginUrl = new URL("/login", req.url);
-        loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
+        if (pathname !== "/") {
+            loginUrl.searchParams.set("callbackUrl", pathname);
+        }
         return NextResponse.redirect(loginUrl);
-    }
+    };
+
+    if (!token) return redirectToLogin();
 
     try {
         const session = await decrypt(token); // ✅ token is a string
 
-        if (!session?.id) {
-            const loginUrl = new URL("/login", req.url);
-            loginUrl.searchParams.set("callbackUrl", pathname);
-            return NextResponse.redirect(loginUrl);
-        }
+        if (!session?.id) return redirectToLogin();
 
         // You could also attach session info to headers if needed
         const response = NextResponse.next();
@@ -43,9 +43,7 @@ export async function middleware(req: NextRequest) {
         return response;
     } catch (err) {
         console.error("Verification failed:", err);
-        const loginUrl = new URL("/login", req.url);
-        loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
-        return NextResponse.redirect(loginUrl);
+        return redirectToLogin();
     }
 }
 
